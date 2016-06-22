@@ -77,10 +77,6 @@ To install the server:
 
 Add nagios servers to the monitoring-servers group in the Ansible inventory.
 
-## Cookbook Todo List
-
-Need to fix check_mem for Ubuntu 16.04
-
 ## License
 
 BSD

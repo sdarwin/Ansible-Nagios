@@ -69,7 +69,7 @@ nagios_host_groups:
       - {command: 'check_disk', description: 'Check Disk Space'}
       - {command: 'check_swap', description: 'Check Swap Space'}
       - {command: 'check_load', description: 'Check Load'}
-      #- {command: 'check_mem', description: 'Check Memory'}
+      - {command: 'check_mem', description: 'Check Memory'}
   #- name: 'webservers'
   #  checks:
   #    - {command: 'check_http', description: 'Check HTTP'}

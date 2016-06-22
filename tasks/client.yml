@@ -45,8 +45,8 @@
     state=started
     enabled=yes
 
-#- name: Install check_mem plugin
-#  copy: src=files/check_mem dest={{ nrpe_plugin_dir }}/check_mem mode=755
+- name: Install check_mem plugin
+  copy: src=files/check_mem dest={{ nrpe_plugin_dir }}/check_mem mode=755
 
 - name: NRPE config file
   template: src=nrpe.cfg dest=/etc/nagios/nrpe.cfg
