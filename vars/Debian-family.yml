@@ -1,0 +1,21 @@
+---
+nagios_apache_service: apache2
+nagios_apache_user: www-data
+nrpe_package_name: nagios-nrpe-server
+nrpe_service_name: nagios-nrpe-server
+
+#nrpe_log_facility:
+#nrpe_allow_bash_command_substitution:
+#nrpe_command_prefix:
+nrpe_pid_file: /var/run/nagios/nrpe.pid
+nrpe_server_port: 5666
+#nrpe_server_address:
+nrpe_user: nagios
+nrpe_group: nagios
+nrpe_dont_blame_nrpe: 0
+nrpe_debug: 0
+nrpe_command_timeout: 60
+#nrpe_connection_timeout:
+nrpe_conf_dir: /etc/nagios
+#nrpe_plugin_dir: /usr/lib/nagios/plugins
+

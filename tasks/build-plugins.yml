@@ -1,0 +1,16 @@
+---
+
+- name: Get Plugins
+  get_url: url={{ nagios_pluginsurl }} dest={{ nagios_download_dir }}/{{ nagios_pluginssrc }}.tar.gz
+
+- name: Unpack Plugin source files
+  shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nagios_pluginssrc }}.tar.gz creates={{ nagios_download_dir }}/{{ nagios_pluginssrc }}
+
+- name: Configure Plugins
+  shell: cd {{ nagios_download_dir }}/{{ nagios_pluginssrc }} && ./configure --with-nagios-user={{ nagios_monitoring_user }} --with-nagios-group=nagios --with-openssl=/usr/bin/openssl creates={{ nagios_download_dir }}/{{ nagios_pluginssrc }}/Makefile
+
+- name: Make Plugins
+  shell: cd {{ nagios_download_dir }}/{{ nagios_pluginssrc }} && make creates={{ nagios_download_dir }}/{{ nagios_pluginssrc }}/plugins/check_ping
+
+- name: Make Install Plugins
+  shell: cd {{ nagios_download_dir }}/{{ nagios_pluginssrc }} && make install creates=/usr/local/nagios/libexec/check_ping

@@ -1,0 +1,6 @@
+---
+nagios_with_httpd_conf: /etc/httpd/conf.d
+
+nrpe_user: nrpe
+nrpe_group: nrpe
+

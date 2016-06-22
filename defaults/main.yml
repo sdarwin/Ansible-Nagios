@@ -1,0 +1,130 @@
+---
+# defaults file for nagios
+
+# Directory that will be used as the location for the downloads§
+nagios_download_dir: "{{ ansible_env.HOME }}/nagios"
+
+nagios_admins_group: 'sysadmin'
+#nagios_users_group: 'users'
+
+# Define the download url for the Nagios Core source files and the version you want to use.
+nagios_url: https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.1.1.tar.gz
+
+# This is the directory where the Nagios source files will be placed, this should be
+# the directory which is created when the download file is unpacked when runnint
+# tar -xzvf nagios-4.1.1.tar.gz
+nagios_src: nagios-4.1.1
+
+# Define the download url for the Plugins and the version you want to use.
+nagios_pluginsurl: http://www.nagios-plugins.org/download/nagios-plugins-2.1.1.tar.gz
+# This is the directory where the Plugin source files will be placed, this should be
+# the directory which is created when the download file is unpacked when runnint
+# tar -xzvf nagios-plugins-2.1.1.tar.gz
+nagios_pluginssrc: nagios-plugins-2.1.1
+
+nagios_monitoring_user: nagios
+nagios_monitoring_command_group: nagcmd
+
+# This is a list of users allowed to login to the nagios web frontend
+nagios_users:
+  - user: nagiosadmin
+    pass: Password1change
+
+#### nrpe-client ####
+
+# Directory that will be used as the location for the download
+#actually, already defined above.
+#download_dir: "{{ ansible_env.HOME }}/nrpe"
+
+# This NRPE package is only used for the plugin, as the nrpe plugin on some distributions
+# require the distributions Nagios package to be installed.
+nrpe_url: http://sourceforge.net/projects/nagios/files/nrpe-2.x/nrpe-2.15/nrpe-2.15.tar.gz
+nrpe_src: nrpe-2.15
+
+# Location of monitoring plugins
+nrpe_client_plugins_dir: /usr/local/nagios/libexec
+
+#### CONFIGS #######
+
+# base directory for nagios installation
+nagios_base_dir: /usr/local/nagios
+
+# nagios object directory
+nagios_object_dir: "{{nagios_base_dir}}/etc/objects"
+
+# if true, nagios_object_dir is a cfg_dir and nagios will
+# autoload all files ending in .cfg
+nagios_cfg_dir_enabled: false
+
+# id of nagios user
+nagios_user: nagios
+
+# id of nagios group
+nagios_group: nagios
+
+nagios_host_groups:
+  - name: 'all'
+    checks:
+      - {command: 'check_ssh', description: 'SSH Service Check'}
+      - {command: 'check_disk', description: 'Check Disk Space'}
+      - {command: 'check_swap', description: 'Check Swap Space'}
+      - {command: 'check_load', description: 'Check Load'}
+      #- {command: 'check_mem', description: 'Check Memory'}
+  #- name: 'webservers'
+  #  checks:
+  #    - {command: 'check_http', description: 'Check HTTP'}
+
+
+nagios_commands:
+  #check_ssh is already in the default installation
+  #- {name: 'check_ssh', command: '$USER1$/check_ssh $ARG1$ $HOSTADDRESS$'}
+  - {name: 'check_disk', command: '$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_disk'}
+  - {name: 'check_load', command: '$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_load'}
+  - {name: 'check_swap', command: '$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_swap'}
+  - {name: 'check_mem', command: '$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_mem'}
+
+nagios_cgi_show_context_help: 1
+nagios_cgi_authorized_for_system_information: '*'
+nagios_cgi_authorized_for_configuration_information: '*'
+nagios_cgi_authorized_for_system_commands: '*'
+nagios_cgi_authorized_for_all_services: '*'
+nagios_cgi_authorized_for_all_hosts: '*'
+nagios_cgi_authorized_for_all_service_commands: '*'
+nagios_cgi_authorized_for_all_host_commands: '*'
+nagios_cgi_default_statusmap_layout: 5
+nagios_cgi_default_statuswrl_layout: 4
+nagios_cgi_result_limit: 100
+nagios_cgi_escape_html_tags: 0
+nagios_cgi_action_url_target: '_blank'
+nagios_cgi_notes_url_target: '_blank'
+nagios_cgi_lock_author_names: 1
+nagios_server_name: nagios
+nagios_conf_dir: "{{nagios_base_dir}}/etc"
+nagios_docroot: "{{nagios_base_dir}}/share"
+nagios_server_vname: nagios
+nagios_plugin_dir: "{{nagios_base_dir}}/libexec"
+nagios_cache_dir: "{{nagios_base_dir}}/var"
+nagios_service_name: nagios
+
+#### nrpe checks ####
+
+nrpe_checks:
+  check_load:
+    command: "{{nrpe_plugin_dir}}/check_load"
+    warning_condition: '25,20,15'
+    critical_condition: '50,45,40'
+  check_disk:
+    command: "{{nrpe_plugin_dir}}/check_disk"
+    warning_condition: '20%'
+    critical_condition: '10%'
+    parameters: "-A -i '.gvfs' -i /run/user -i /run/lxcfs"
+  check_swap:
+    command: "{{nrpe_plugin_dir}}/check_swap"
+    warning_condition: '30%'
+    critical_condition: '20%'
+  check_mem:
+    command: "{{nrpe_plugin_dir}}/check_mem"
+    warning_condition: '60'
+    critical_condition: '70'
+
+

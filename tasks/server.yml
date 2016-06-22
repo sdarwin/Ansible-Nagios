@@ -1,0 +1,94 @@
+---
+# tasks file for nagios
+
+- name: Ensure download directory is present
+  file: path={{ nagios_download_dir }} state=directory
+
+- include: load-variables.yml
+
+- include: setup-RedHat-family-prerequisites.yml
+  when: ansible_os_family == 'RedHat'
+
+- include: setup-Debian-family-prerequisites.yml
+  when: ansible_os_family == 'Debian'
+
+#nagios prerequisite
+- name: Enable version
+  apache2_module:
+    name: version
+    state: present
+  notify: restart apache
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '12.04'
+
+- name: Create nagcmd group
+  group: name={{ nagios_monitoring_command_group }} state=present
+
+- name: Create nagios user
+  user: name={{ nagios_monitoring_user }} state=present groups={{ nagios_monitoring_command_group }}
+
+- name: Add apache user to nagcmd group
+  user: name={{ nagios_apache_user }} state=present groups={{ nagios_monitoring_command_group }}
+
+- include: build-nagios.yml
+
+- include: build-plugins.yml
+
+- name: Activate Nagios site on Ubuntu 
+  file: src=/etc/apache2/conf-available/nagios.conf dest=/etc/apache2/conf-enabled/nagios.conf state=link owner=root group=root
+  notify: restart apache
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int > 12 
+
+- name: Activate Nagios site on Debian
+  file: src=/etc/apache2/conf-available/nagios.conf dest=/etc/apache2/conf-enabled/nagios.conf state=link owner=root group=root
+  notify: restart apache
+  when: ansible_distribution == 'Debian' and ansible_distribution_major_version|int > 7 
+
+- name: Enable CGI on Ubuntu
+  apache2_module:
+    name: cgi
+    state: present
+  notify: restart apache
+  when: ansible_distribution == 'Ubuntu' and ( ansible_distribution_version == '14.04' or ansible_distribution_version == '16.04' )
+
+- name: Enable CGI on Debian
+  apache2_module:
+    name: cgi
+    state: present
+  notify: restart apache
+  when: ansible_distribution == 'Debian' 
+
+- name: Fix Nagios startup on Debian
+  shell: cd /etc/rc2.d && ln -s ../init.d/nagios S18nagios creates=/etc/rc2.d/S18nagios
+  when: ansible_distribution == 'Debian'
+
+- name: Default facts for selinux
+  set_fact:
+    check_selinux: false
+    current_selinux_mode: false
+
+- name: Check if SELinux is running and has the mode key
+  set_fact: check_selinux=true
+  when: ansible_selinux != False and 'mode' in ansible_selinux.keys()
+
+- name: Store selinux mode in current_selinux_mode variable
+  set_fact:
+    current_selinux_mode: '{{ ansible_selinux.mode }}'
+  when: check_selinux
+
+- name: Check if SELinux is running in enforcing mode and change access
+  file: path=/usr/local/nagios setype=httpd_sys_content_t state=directory recurse=yes
+  when: current_selinux_mode == 'enforcing'
+
+- name: http service state
+  service: name={{ nagios_apache_service }} state=started enabled=yes
+
+- name: include nrpe_client
+  include: nrpe_client.yml
+
+- name: include configs task
+  include: configs.yml
+
+- name: Ensure Nagios is started
+  service: name=nagios state=started enabled=yes
+
+

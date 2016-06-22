@@ -1,0 +1,64 @@
+---
+
+- name: install apache, Ubuntu 12, 14
+  apt: pkg={{ item }} state=present update_cache=yes
+  with_items:
+   - apache2
+   - php5-gd
+   - libgd2-xpm-dev
+   - libapache2-mod-php5
+   - unzip
+  when: ansible_distribution == 'Ubuntu' and ( ansible_distribution_version == '12.04' or ansible_distribution_version == '14.04' )
+
+- name: install apache, Ubuntu 16
+  apt: pkg={{ item }} state=present update_cache=yes
+  with_items:
+   - apache2
+   - php-gd
+   - libgd2-xpm-dev
+   - libapache2-mod-php
+   - unzip
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04' 
+
+- name: install apache, Debian
+  apt: pkg={{ item }} state=present update_cache=yes
+  with_items:
+   - apache2
+   - php5-gd
+   - libgd2-xpm-dev
+   - libapache2-mod-php5
+   - unzip
+  when: ansible_distribution == 'Debian'  
+
+- name: Install Nagios prerequisites for Ubuntu
+  apt: pkg={{ item }} state=present
+  with_items:
+   #- linux-headers-{{ ansible_kernel }}
+   - build-essential
+   - python-passlib
+
+- name: Install Plugin prerequisites for Debian family
+  apt: pkg={{ item }} state=present
+  with_items:
+   - libssl-dev
+   - dnsutils
+   - fping
+   - libldap2-dev
+   - libpq-dev
+   - smbclient
+   - gawk
+
+#not supported on 16.04
+- name: Install Plugin prerequisites for Ubuntu
+  apt: pkg={{ item }} state=present
+  with_items:
+   - libradiusclient-ng-dev
+  when: ansible_distribution == 'Ubuntu' and ( ansible_distribution_version == '12.04' or ansible_distribution_version == '14.04' )
+
+- name: Install NRPE prerequisites
+  apt: pkg={{ item }} state=present
+  with_items:
+   - build-essential
+   - openssl
+   - libssl-dev
+

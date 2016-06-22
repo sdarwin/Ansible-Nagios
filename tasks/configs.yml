@@ -1,0 +1,76 @@
+
+- name: Install config files
+  become: true
+  notify: restart nagios
+  template: >
+    src={{item.src}}
+    dest={{nagios_object_dir}}/{{item.dest}}
+    owner={{nagios_user}}
+    group={{nagios_group}}
+    mode=640
+  with_items:
+    - { src: hosts.cfg, dest: hosts.cfg }
+    - { src: hostgroups.cfg, dest: hostgroups.cfg }
+    - { src: services.cfg, dest: services.cfg }
+    - { src: commands.cfg, dest: additional_commands.cfg }
+
+- name: Install contacts.cfg
+  become: true
+  notify: restart nagios
+  template: >
+    src={{item.src}}
+    dest={{nagios_object_dir}}/{{item.dest}}
+    owner={{nagios_user}}
+    group={{nagios_group}}
+    mode=640
+  with_items:
+    - { src: contacts.cfg, dest: contacts.cfg }
+  when: users is defined
+
+- name: Install more config files
+  become: true
+  notify: restart nagios
+  template: >
+    src={{item.src}}
+    dest={{nagios_base_dir}}/etc/{{item.dest}}
+    owner={{nagios_user}}
+    group={{nagios_group}}
+    mode=775
+  with_items:
+    - { src: cgi.cfg, dest: cgi.cfg }
+
+- name: Update nagios.cfg with config files
+  become: true
+  notify: restart nagios
+  lineinfile: >
+    dest={{nagios_base_dir}}/etc/nagios.cfg
+    line="cfg_file={{nagios_object_dir}}/{{item}}.cfg"
+    regexp="^cfg_file\={{nagios_object_dir}}/{{item}}\.cfg"
+  with_items:
+    - hosts
+    - hostgroups
+    - services
+    - additional_commands
+  when: nagios_cfg_dir_enabled == false
+
+- name: Update nagios.cfg with config dir
+  become: true
+  notify: restart nagios
+  lineinfile: >
+    dest={{nagios_base_dir}}/etc/nagios.cfg
+    line="cfg_dir={{nagios_object_dir}}"
+    regexp="^cfg_dir={{nagios_object_dir}}"
+  when: nagios_cfg_dir_enabled == true
+
+#if there is a conflict: two localhost definitions
+- name: Update nagios.cfg, comment out localhost
+  become: true
+  notify: restart nagios
+  lineinfile: >
+    dest={{nagios_base_dir}}/etc/nagios.cfg
+    line="#cfg_file={{nagios_object_dir}}/{{item}}.cfg"
+    regexp="^cfg_file\={{nagios_object_dir}}/{{item}}\.cfg"
+  with_items:
+    - localhost
+  when: nagios_removelocalhost is defined or 'localhost' in groups['all']
+ 

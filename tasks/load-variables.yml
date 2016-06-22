@@ -1,0 +1,7 @@
+---
+
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}-family.yml"
+
+- name: Include Distribution version specific variables
+  include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"

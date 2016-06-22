@@ -1,0 +1,63 @@
+---
+
+- name: GET Nagios
+  get_url: url={{ nagios_url }} dest={{ nagios_download_dir }}/{{ nagios_src }}.tar.gz
+
+- name: Unpack Nagios source files
+  shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nagios_src }}.tar.gz creates={{ nagios_download_dir }}/{{ nagios_src }}
+
+- name: ./configure
+  shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && ./configure --with-command-group={{ nagios_monitoring_command_group }} -with-httpd_conf={{ nagios_with_httpd_conf }} --with-nagios-user={{ nagios_monitoring_user }} creates={{ nagios_download_dir }}/{{ nagios_src }}/Makefile
+
+- name: Make all
+  shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make all creates={{ nagios_download_dir }}/{{ nagios_src }}/base/nagios
+
+- name: Make install
+  shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install creates=/usr/local/nagios/bin/nagios
+
+- name: Make install-config
+  shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-config creates=/usr/local/nagios/etc/nagios.cfg
+
+- name: Make install-commandmode
+  shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-commandmode creates=/usr/local/nagios/var/rw
+
+- name: Make install-devel
+  shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-devel creates=/usr/local/nagios/include/nagios/nagios.h
+
+- name: Make install-webconf
+  shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-webconf creates={{ nagios_with_httpd_conf }}/nagios.conf
+  notify: restart apache
+  when: not ( ansible_distribution == "Debian" and ansible_distribution_major_version == "7" )
+
+- name: Make install-webconf-Debian
+  shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-webconf HTTPD_CONF={{ nagios_with_httpd_conf }}
+  args:
+    creates: "{{ nagios_with_httpd_conf }}/nagios.conf"
+  notify: restart apache
+  when: ansible_distribution == "Debian" and ansible_distribution_major_version == "7"
+
+- name: Make install-init
+  shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-init creates=/etc/init.d/nagios
+
+- name: insert/update /etc/init.d/nagios
+  lineinfile:
+    dest: /etc/init.d/nagios
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    insertbefore: "### END INIT INFO"
+  with_items:
+    - { regexp: '^# Default-Start:\s*2 3 4 5', line: '# Default-Start:        2 3 4 5' }
+    - { regexp: '^# Default-Stop:\s*0 1 6', line: '# Default-Stop:         0 1 6' }
+
+- name: Set htpasswd for gui users
+  htpasswd: path=/usr/local/nagios/etc/htpasswd.users name={{ item.user }} password={{ item.pass }} state=present
+  with_items: "{{ nagios_users | default([]) }}"
+
+- name: Set htpasswd for gui users from users variable
+  htpasswd: crypt_scheme=plaintext path=/usr/local/nagios/etc/htpasswd.users name={{ item.username }} password={{ item.htpasswd }} state=present
+  when: nagios_admins_group in item.groups
+  with_items: "{{ users | default([]) }}"
+
+#Let's move this to the end of the playbook, so that configs can be set up first
+#- name: Ensure Nagios is started
+#  service: name=nagios state=started enabled=yes

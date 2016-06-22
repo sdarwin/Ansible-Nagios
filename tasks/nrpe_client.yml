@@ -1,0 +1,32 @@
+---
+# tasks file for nagios
+
+- name: Ensure download directory is present
+  file: path={{ nagios_download_dir }} state=directory
+
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}-family.yml"
+
+- include: setup-RedHat-family-prerequisites.yml
+  when: ansible_os_family == 'RedHat'
+
+- include: setup-Debian-family-prerequisites.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Get NRPE
+  get_url: url={{ nrpe_url }} dest={{ nagios_download_dir }}/{{ nrpe_src }}.tar.gz
+
+- name: Unpack NRPE source files
+  shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nrpe_src }}.tar.gz creates={{ nagios_download_dir }}/{{ nrpe_src }}
+
+- name: Configure NRPE
+  shell: cd {{ nagios_download_dir }}/{{ nrpe_src }} && ./configure --with-ssl=/usr/bin/openssl --with-ssl-lib=/usr/lib/x86_64-linux-gnu creates={{ nagios_download_dir }}/{{ nrpe_src }}/Makefile
+
+- name: Make NRPE
+  shell: cd {{ nagios_download_dir }}/{{ nrpe_src }} && make all creates={{ nagios_download_dir }}/{{ nrpe_src }}/src/check_nrpe
+
+- name: Ensure plugins directory is present
+  file: path={{ nrpe_client_plugins_dir }} state=directory
+
+- name: Copy check_nrpe
+  shell: cp {{ nagios_download_dir }}/{{ nrpe_src }}/src/check_nrpe {{ nrpe_client_plugins_dir }}/check_nrpe creates={{ nrpe_client_plugins_dir }}/check_nrpe

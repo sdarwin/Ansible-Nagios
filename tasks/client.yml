@@ -1,0 +1,65 @@
+---
+- include: load-variables.yml
+
+- name: nrpe_plugin_dir_default
+  set_fact:
+    nrpe_plugin_dir: /usr/lib/nagios/plugins
+
+- name: nrpe_plugin_dir_1
+  set_fact:
+    nrpe_plugin_dir: /usr/lib64/nagios/plugins
+  when: ansible_os_family == "RedHat" and ansible_architecture != "i686"
+
+- name: install epel repo
+  yum:
+    name: "{{ epel_repo_url }}"
+    state: present
+  tags:
+    - epel
+  when: ansible_os_family == 'RedHat'
+
+- name: import epel gpg key
+  rpm_key:
+    key: "{{ epel_repo_gpg_key_path }}"
+    state: present
+  tags:
+    - epel
+  when: ansible_os_family == 'RedHat'
+
+- name: Install NRPE
+  package: >
+    name={{ nrpe_package_name }}
+    state=latest
+
+- name: Install Plugins
+  package : >
+    name={{ item }}
+    state=latest
+  when: ansible_os_family == 'RedHat'
+  with_items:
+   - nagios-plugins-all
+
+- name: Enable NRPE service
+  service: >
+    name={{ nrpe_service_name }}
+    state=started
+    enabled=yes
+
+#- name: Install check_mem plugin
+#  copy: src=files/check_mem dest={{ nrpe_plugin_dir }}/check_mem mode=755
+
+- name: NRPE config file
+  template: src=nrpe.cfg dest=/etc/nagios/nrpe.cfg
+  notify: restart nrpe
+
+#for redhat
+- name: nrpe.d dir
+  file: path={{ nrpe_conf_dir }}/nrpe.d state=directory
+
+- name: NRPE checks
+  template: > 
+    src=nrpe_check.cfg
+    dest={{ nrpe_conf_dir }}/nrpe.d/{{ item.key }}.cfg
+  with_dict: "{{ nrpe_checks }}"
+  notify: restart nrpe
+
