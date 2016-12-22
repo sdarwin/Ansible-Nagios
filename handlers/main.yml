@@ -1,14 +1,14 @@
 ---
-# handlers file for nagios
+- name: pauser 
+  pause: seconds=2
+  
 - name: restart apache
   service: name={{ nagios_apache_service }} state=restarted
 
-#handlers for configs
 - name: restart nagios
   become: true
   service: name=nagios state=restarted
 
-#handlers for nrpe
 - name: restart nrpe
   become: true
   service: name={{nrpe_service_name}} state=restarted

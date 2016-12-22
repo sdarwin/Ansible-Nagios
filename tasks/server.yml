@@ -90,5 +90,5 @@
 
 - name: Ensure Nagios is started
   service: name=nagios state=started enabled=yes
-
+  notify: pauser
 
