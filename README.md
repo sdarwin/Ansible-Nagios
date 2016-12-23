@@ -63,6 +63,29 @@ Ansible hosts in the 'all' group are converted to nagios monitored hosts. No con
 
 Ansible groups are converted to nagios hostgroups. No configuration required. 
 
+## Skipping Hosts and Hostgroups
+
+The following values are set in defaults/main.yml :
+
+```
+nagios_hosts_ignore: ""
+nagios_groups_ignore: ""
+```
+
+They can be overridden to include Hosts or Hostgroups that should be skipped entirely. Examples:
+
+```
+nagios_hosts_ignore:
+  - host1_skip_this_host
+nagios_groups_ignore:
+  - hostgroup_dev_to_skip
+  - and_this_one
+```
+
+This determines which hosts the nagios server will ignore/skip, because these hosts will be excluded from the configs.
+
+Another consideration is whether the ansible playbook should run on all servers. The example playbook test.yml has "- hosts: all", which installs the nagios client on all known servers. You could adjust your top-level playbook and set a different "hosts: " directive. However it's probably fine to install the monitoring client on all servers.
+
 ## Example Playbook
 
 Refer to test.yml in the root of this role.

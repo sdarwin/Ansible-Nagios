@@ -1,5 +1,6 @@
 ---
 # defaults file for nagios
+nrpe_plugin_dir: /usr/lib/nagios/plugins
 
 # Directory that will be used as the location for the downloads§
 nagios_download_dir: "{{ ansible_env.HOME }}/nagios"
@@ -127,4 +128,6 @@ nrpe_checks:
     warning_condition: '60'
     critical_condition: '70'
 
+nagios_hosts_ignore: ""
+nagios_groups_ignore: ""
 

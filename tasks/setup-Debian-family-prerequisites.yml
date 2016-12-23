@@ -1,7 +1,11 @@
 ---
+- name: Update repositories cache 
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
 
 - name: install apache, Ubuntu 12, 14
-  apt: pkg={{ item }} state=present update_cache=yes
+  apt: pkg={{ item }} state=present 
   with_items:
    - apache2
    - php5-gd
@@ -11,7 +15,7 @@
   when: ansible_distribution == 'Ubuntu' and ( ansible_distribution_version == '12.04' or ansible_distribution_version == '14.04' )
 
 - name: install apache, Ubuntu 16
-  apt: pkg={{ item }} state=present update_cache=yes
+  apt: pkg={{ item }} state=present 
   with_items:
    - apache2
    - php-gd
@@ -21,7 +25,7 @@
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04' 
 
 - name: install apache, Debian
-  apt: pkg={{ item }} state=present update_cache=yes
+  apt: pkg={{ item }} state=present 
   with_items:
    - apache2
    - php5-gd
