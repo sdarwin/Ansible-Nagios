@@ -8,20 +8,24 @@ nagios_download_dir: "{{ ansible_env.HOME }}/nagios"
 nagios_admins_group: 'sysadmin'
 #nagios_users_group: 'users'
 
+nagios_version: 4.1.1
+nagios_plugins_version: 2.1.1
+nrpe_version: 2.15
+
 # Define the download url for the Nagios Core source files and the version you want to use.
-nagios_url: https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.1.1.tar.gz
+nagios_url: "https://assets.nagios.com/downloads/nagioscore/releases/nagios-{{ nagios_version }}.tar.gz"
 
 # This is the directory where the Nagios source files will be placed, this should be
 # the directory which is created when the download file is unpacked when runnint
 # tar -xzvf nagios-4.1.1.tar.gz
-nagios_src: nagios-4.1.1
+nagios_src: "nagios-{{ nagios_version }}"
 
 # Define the download url for the Plugins and the version you want to use.
-nagios_pluginsurl: http://www.nagios-plugins.org/download/nagios-plugins-2.1.1.tar.gz
+nagios_pluginsurl: "http://www.nagios-plugins.org/download/nagios-plugins-{{ nagios_plugins_version }}.tar.gz"
 # This is the directory where the Plugin source files will be placed, this should be
 # the directory which is created when the download file is unpacked when runnint
 # tar -xzvf nagios-plugins-2.1.1.tar.gz
-nagios_pluginssrc: nagios-plugins-2.1.1
+nagios_pluginssrc: "nagios-plugins-{{ nagios_plugins_version }}"
 
 nagios_monitoring_user: nagios
 nagios_monitoring_command_group: nagcmd
@@ -39,8 +43,8 @@ nagios_users:
 
 # This NRPE package is only used for the plugin, as the nrpe plugin on some distributions
 # require the distributions Nagios package to be installed.
-nrpe_url: http://sourceforge.net/projects/nagios/files/nrpe-2.x/nrpe-2.15/nrpe-2.15.tar.gz
-nrpe_src: nrpe-2.15
+nrpe_url: "http://sourceforge.net/projects/nagios/files/nrpe-{{ nrpe_version | regex_replace('(\\d+)\\..*', '\\1') }}.x/nrpe-{{ nrpe_version }}/nrpe-{{ nrpe_version }}.tar.gz"
+nrpe_src: "nrpe-{{ nrpe_version }}"
 
 # Location of monitoring plugins
 nrpe_client_plugins_dir: /usr/local/nagios/libexec
@@ -130,4 +134,7 @@ nrpe_checks:
 
 nagios_hosts_ignore: ""
 nagios_groups_ignore: ""
+nagios_allowed_hosts:
+- 127.0.0.1
+- ::1
 
