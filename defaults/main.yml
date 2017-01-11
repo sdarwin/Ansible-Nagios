@@ -140,3 +140,7 @@ nagios_allowed_hosts:
   - 127.0.0.1
   - ::1
 
+# Set this to remove the Ansible "all" group. In that case, be sure to add at least one new Ansible group, and one new service check in the nagios_host_groups variable
+#nagios_remove_all_group: "yes"
+nagios_remove_all_group: "no"
+
