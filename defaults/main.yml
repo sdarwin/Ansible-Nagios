@@ -134,7 +134,9 @@ nrpe_checks:
 
 nagios_hosts_ignore: ""
 nagios_groups_ignore: ""
+
+# nagios_allowed_hosts will automatically include the "monitoring-servers" as well
 nagios_allowed_hosts:
-- 127.0.0.1
-- ::1
+  - 127.0.0.1
+  - ::1
 
