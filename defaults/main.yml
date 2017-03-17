@@ -135,12 +135,18 @@ nrpe_checks:
 nagios_hosts_ignore: ""
 nagios_groups_ignore: ""
 
+### If needed, you can completely disable web login authentication by setting this variable to false
+### Default: `nagios_web_login_auth: true`
+
+nagios_web_login_auth: true
+
 # nagios_allowed_hosts will automatically include the "monitoring-servers" as well
 nagios_allowed_hosts:
   - 127.0.0.1
   - ::1
 
+nagios_monitoring_servers_group_name: "monitoring-servers"
+
 # Set this to remove the Ansible "all" group. In that case, be sure to add at least one new Ansible group, and one new service check in the nagios_host_groups variable
 #nagios_remove_all_group: "yes"
 nagios_remove_all_group: "no"
-

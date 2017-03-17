@@ -10,7 +10,9 @@ Email is a recommended prerequisite, with choices of Exim, Postfix, and others.
 
 ## Role Variables
 
-All the variables in the defaults/ directory may be overridden or changed. 
+All the variables in the defaults/ directory may be overridden or changed.
+
+The default ansible inventory group `monitoring-servers` can be customized with the `nagios_monitoring_servers_group_name` variable.
 
 ### Contacts/Users:
 
@@ -61,7 +63,7 @@ Ansible hosts in the 'all' group are converted to nagios monitored hosts. No con
 
 ### Nagios Hostgroups:
 
-Ansible groups are converted to nagios hostgroups. No configuration required. 
+Ansible groups are converted to nagios hostgroups. No configuration required.
 
 ## Skipping Hosts and Hostgroups
 
@@ -108,4 +110,3 @@ BSD
 
 By Sam Darwin, 2016. Based on pre-existing roles, see ACKNOWLEDGEMENTS.md file.
 Feedback and bug reports welcome.
-

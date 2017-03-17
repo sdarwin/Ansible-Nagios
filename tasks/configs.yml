@@ -73,4 +73,16 @@
   with_items:
     - localhost
   when: nagios_removelocalhost is defined or 'localhost' in groups['all']
- 
+
+- name: Disable web login authentication
+  become: true
+  notify: restart apache
+  template:
+    src: nagios.conf
+    dest: /etc/apache2/conf-available/nagios.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+    force: yes
+  when: nagios_web_login_auth == false
