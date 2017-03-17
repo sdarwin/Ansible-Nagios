@@ -136,9 +136,9 @@ nagios_hosts_ignore: ""
 nagios_groups_ignore: ""
 
 ### If needed, you can completely disable web login authentication by setting this variable to false
-### Default: `nagios_web_login_auth: "true"`
+### Default: `nagios_web_login_auth: true`
 
-nagios_web_login_auth: "true"
+nagios_web_login_auth: true
 
 # nagios_allowed_hosts will automatically include the "monitoring-servers" as well
 nagios_allowed_hosts:
