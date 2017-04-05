@@ -147,3 +147,6 @@ nagios_allowed_hosts:
 #nagios_remove_all_group: "yes"
 nagios_remove_all_group: "no"
 
+#Probably leave this as-is. It should match your top-level ansible playbook, such as "- hosts: monitoring-servers"
+nagios_monitoring_servers_group_name: "monitoring-servers"
+
