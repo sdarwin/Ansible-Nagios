@@ -70,6 +70,7 @@ nagios_user: nagios
 # id of nagios group
 nagios_group: nagios
 
+#define service checks per hostgroup here. Groups themselves are created by the ansible inventory.
 nagios_host_groups:
   - name: 'all'
     checks:
@@ -82,6 +83,12 @@ nagios_host_groups:
   #  checks:
   #    - {command: 'check_http', description: 'Check HTTP'}
 
+#define service checks per host here. Hosts themselves are created by the ansible inventory.
+nagios_hosts: ""
+#nagios_hosts:
+#  - name: 'web1'
+#    checks:
+#      - {command: 'check_http', description: 'check website'}
 
 nagios_commands:
   #check_ssh is already in the default installation

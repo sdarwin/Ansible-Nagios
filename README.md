@@ -52,8 +52,9 @@ You can add more commands by adding to, or overriding, the variable.
 
 ### Nagios Services:
 
-The nagios services are currently in the "checks" per hostgroup variables, see defaults/main.yml.
+The nagios services are currently in the "checks" per hostgroup in nagios_host_groups, see defaults/main.yml.
 You can add more services by adding to, or overriding, the variable.
+Service checks per host are handled similarly in the nagios_hosts variable in defaults/main.yml.
 
 ### Nagios Hosts:
 
