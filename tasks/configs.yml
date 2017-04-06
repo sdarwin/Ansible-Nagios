@@ -13,6 +13,7 @@
     - { src: hostgroups.cfg, dest: hostgroups.cfg }
     - { src: services.cfg, dest: services.cfg }
     - { src: commands.cfg, dest: additional_commands.cfg }
+    - { src: additional_timeperiods.cfg, dest: additional_timeperiods.cfg }
 
 - name: Install contacts.cfg
   become: true
@@ -51,6 +52,7 @@
     - hostgroups
     - services
     - additional_commands
+    - additional_timeperiods
   when: nagios_cfg_dir_enabled == false
 
 - name: Update nagios.cfg with config dir

@@ -157,3 +157,16 @@ nagios_remove_all_group: "no"
 #Probably leave this as-is. It should match your top-level ansible playbook, such as "- hosts: monitoring-servers"
 nagios_monitoring_servers_group_name: "monitoring-servers"
 
+#optionally define more timeperiods.
+nagios_timeperiods: ""
+#nagios_timeperiods:
+#  - name: "webchecks"
+#    alias: "webchecks"
+#    sunday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
+#    monday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
+#    tuesday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
+#    wednesday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
+#    thursday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
+#    friday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
+#    saturday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
+
