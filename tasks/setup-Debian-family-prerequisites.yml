@@ -51,6 +51,7 @@
    - libpq-dev
    - smbclient
    - gawk
+   - libmysqlclient-dev
 
 #not supported on 16.04
 - name: Install Plugin prerequisites for Ubuntu

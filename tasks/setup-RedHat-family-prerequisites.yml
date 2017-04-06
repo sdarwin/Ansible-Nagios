@@ -49,6 +49,7 @@
    - radiusclient-ng-devel
    - samba-client
    - libsmbclient
+   - mysql-devel
 
 - name: Install NRPE prerequisites
   yum: pkg={{ item }} state=present
