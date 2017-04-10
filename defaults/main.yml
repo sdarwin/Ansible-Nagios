@@ -126,8 +126,8 @@ nagios_service_name: nagios
 nrpe_checks:
   check_load:
     command: "{{nrpe_plugin_dir}}/check_load"
-    warning_condition: '25,20,15'
-    critical_condition: '50,45,40'
+    warning_condition: "{{ ansible_processor_count }},{{ ansible_processor_count * 3 / 4 }},{{ ansible_processor_count / 2 }}"
+    critical_condition: "{{ ansible_processor_count * 2 }},{{ ansible_processor_count * 3 / 2 }},{{ ansible_processor_count }}"
   check_disk:
     command: "{{nrpe_plugin_dir}}/check_disk"
     warning_condition: '20%'
@@ -139,8 +139,8 @@ nrpe_checks:
     critical_condition: '20%'
   check_mem:
     command: "{{nrpe_plugin_dir}}/check_mem"
-    warning_condition: '60'
-    critical_condition: '70'
+    warning_condition: '70'
+    critical_condition: '80'
 
 nagios_hosts_ignore: ""
 nagios_groups_ignore: ""
