@@ -75,4 +75,4 @@
   with_items:
     - localhost
   when: nagios_removelocalhost is defined or 'localhost' in groups['all']
- 
+
