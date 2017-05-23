@@ -11,7 +11,7 @@ nagios_admins_group: 'sysadmin'
 nagios_version: 4.3.1
 nagios_plugins_version: 2.2.0
 #nrpe_version: 2.15
-nrpe_version: 3.0.1
+nrpe_version: 3.1.0
 
 # Define the download url for the Nagios Core source files and the version you want to use.
 nagios_url: "https://assets.nagios.com/downloads/nagioscore/releases/nagios-{{ nagios_version }}.tar.gz"
@@ -45,8 +45,8 @@ nagios_users:
 # This NRPE package is only used for the plugin, as the nrpe plugin on some distributions
 # require the distributions Nagios package to be installed.
 #nrpe_url: "http://sourceforge.net/projects/nagios/files/nrpe-{{ nrpe_version | regex_replace('(\\d+)\\..*', '\\1') }}.x/nrpe-{{ nrpe_version }}/nrpe-{{ nrpe_version }}.tar.gz"
-#nrpe_src: "nrpe-{{ nrpe_version }}"
-nrpe_url: "https://downloads.sourceforge.net/project/nagios/nrpe-{{ nrpe_version | regex_replace('(\\d+)\\..*', '\\1') }}.x/nrpe-{{ nrpe_version }}.tar.gz"
+#nrpe_url: "https://downloads.sourceforge.net/project/nagios/nrpe-{{ nrpe_version | regex_replace('(\\d+)\\..*', '\\1') }}.x/nrpe-{{ nrpe_version }}.tar.gz"
+nrpe_url: "https://downloads.sourceforge.net/project/nagios/nrpe-{{ nrpe_version | regex_replace('(\\d+)\\..*', '\\1') }}.x//nrpe-{{ nrpe_version }}/nrpe-{{ nrpe_version }}.tar.gz"
 nrpe_src: "nrpe-{{ nrpe_version }}"
 
 # Location of monitoring plugins
