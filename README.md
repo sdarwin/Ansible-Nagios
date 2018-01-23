@@ -85,11 +85,11 @@ nagios_groups_ignore:
 
 This determines which hosts the nagios server will ignore/skip, because these hosts will be excluded from the configs.
 
-Another consideration is whether the ansible playbook should run on all servers. The example playbook test.yml has "- hosts: all", which installs the nagios client on all known servers. You could adjust your top-level playbook and set a different "hosts: " directive. However it's probably fine to install the monitoring client on all servers.
+Another consideration is whether the ansible playbook should run on all servers. The example playbook default.yml has "- hosts: all", which installs the nagios client on all known servers. You could adjust your top-level playbook and set a different "hosts: " directive. However it's probably fine to install the monitoring client on all servers.
 
 ## Example Playbook
 
-Refer to test.yml in the root of this role.
+Refer to default.yml in the root of this role.
 
 To install the client:  
       roles:   

@@ -24,7 +24,7 @@
   group: name={{ nagios_monitoring_command_group }} state=present
 
 - name: Create nagios user
-  user: name={{ nagios_monitoring_user }} state=present groups={{ nagios_monitoring_command_group }}
+  user: name={{ nagios_monitoring_user }} shell=/bin/bash state=present groups={{ nagios_monitoring_command_group }}
 
 - name: Add apache user to nagcmd group
   user: name={{ nagios_apache_user }} state=present groups={{ nagios_monitoring_command_group }}
@@ -82,10 +82,10 @@
 - name: http service state
   service: name={{ nagios_apache_service }} state=started enabled=yes
 
-- name: include nrpe_client
+- name: Include nrpe_client
   include: nrpe_client.yml
 
-- name: include configs task
+- name: Include configs task
   include: configs.yml
 
 - name: Ensure Nagios is started

@@ -8,10 +8,9 @@ nagios_download_dir: "{{ ansible_env.HOME }}/nagios"
 nagios_admins_group: 'sysadmin'
 #nagios_users_group: 'users'
 
-nagios_version: 4.3.1
-nagios_plugins_version: 2.2.0
-#nrpe_version: 2.15
-nrpe_version: 3.1.0
+nagios_version: 4.3.4
+nagios_plugins_version: 2.2.1
+nrpe_version: 3.2.1
 
 # Define the download url for the Nagios Core source files and the version you want to use.
 nagios_url: "https://assets.nagios.com/downloads/nagioscore/releases/nagios-{{ nagios_version }}.tar.gz"
@@ -76,7 +75,7 @@ nagios_host_groups:
     checks:
       - {command: 'check_ssh', description: 'SSH Service Check'}
       - {command: 'check_disk', description: 'Check Disk Space'}
-      - {command: 'check_swap', description: 'Check Swap Space'}
+      #- {command: 'check_swap', description: 'Check Swap Space'}
       - {command: 'check_load', description: 'Check Load'}
       - {command: 'check_mem', description: 'Check Memory'}
   #- name: 'webservers'
