@@ -99,7 +99,10 @@ To install the server:
       roles:  
         - { role: 'sdarwin.nagios', run_nagios_server: true }   
 
-Add nagios servers to the monitoring-servers group in the Ansible inventory.
+Add nagios servers to the monitoring-servers group in the Ansible inventory. Example:
+  
+[monitoring-servers]  
+monitor.example.com  
 
 ## License
 
