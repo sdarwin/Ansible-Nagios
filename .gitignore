@@ -1,4 +1,7 @@
 .bundle/
 .vagrant/
 *.retry
+.kitchen
+test.txt
+
 
