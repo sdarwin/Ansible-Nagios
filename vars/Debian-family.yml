@@ -19,3 +19,13 @@ nrpe_command_timeout: 60
 nrpe_conf_dir: /etc/nagios
 #nrpe_plugin_dir: /usr/lib/nagios/plugins
 
+default_nagios_plugin_packages:
+ - libssl-dev
+ - dnsutils
+ - fping
+ - libldap2-dev
+ - libpq-dev
+ - smbclient
+ - gawk
+ - libmysqlclient-dev
+

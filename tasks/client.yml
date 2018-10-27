@@ -5,8 +5,6 @@
     cache_valid_time: 3600
   when: ansible_os_family == "Debian"
 
-- include: load-variables.yml
-
 - name: nrpe_plugin_dir_default
   set_fact:
     nrpe_plugin_dir: /usr/lib/nagios/plugins

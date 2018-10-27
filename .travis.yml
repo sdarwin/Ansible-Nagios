@@ -1,0 +1,86 @@
+---
+sudo: required
+
+#testing
+branches:
+  only:
+  - master
+  - bionic
+
+env:
+  - distro: debian8
+    init: /lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    playbook: test.yml
+  - distro: debian9
+    init: /lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    playbook: test.yml
+  - distro: centos7
+    init: /usr/lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    playbook: test.yml
+    #- distro: trusty
+    #init: /sbin/init
+    #run_opts: "--privileged"
+    #playbook: test.yml
+  - distro: xenial
+    init: /lib/systemd/systemd
+    run_opts: '--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'
+    playbook: test.yml
+  - distro: bionic
+    init: /lib/systemd/systemd
+    run_opts: '--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro'
+    playbook: test.yml
+
+services:
+  - docker
+
+before_install:
+  # Pull container.
+  - 'sudo docker pull sdarwin/${distro}-ansible:latest'
+
+script:
+  - container_id=$(mktemp)
+  # Run container in detached state.
+  - 'sudo docker run --add-host nagios.example.com:127.0.1.1 --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} sdarwin/${distro}-ansible:latest "${init}" > "${container_id}"'
+
+  # add ansible hosts
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm /bin/bash -c ''echo -e "\n[monitoring-servers]\nlocalhost ansible_connection=local\n" > /etc/ansible/hosts '' '
+  # check ansible hosts
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm /bin/bash -c ''cat /etc/ansible/hosts '' '
+
+  # upgrade pip
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm pip install --upgrade pip'
+  
+  # upgrade ansible
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm pip install ansible==2.5.9'
+
+  # Ansible syntax check.
+  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook --extra-vars ''${ansible_vars}'' /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check'
+
+  # Test role.
+  - 'sudo docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook  --extra-vars ''${ansible_vars}'' /etc/ansible/roles/role_under_test/tests/${playbook}'
+
+  # Test role idempotence.
+  - idempotence=$(mktemp)
+  - 'sudo docker exec "$(cat ${container_id})" ansible-playbook --extra-vars ''${ansible_vars}'' /etc/ansible/roles/role_under_test/tests/${playbook} | tee -a ${idempotence}'
+  - >
+    tail ${idempotence}
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+
+  # Check if munin is responding on port 4949.
+  # TODO
+  
+  #Check website
+  - 'docker exec "$(cat ${container_id})" env TERM=xterm env ANSIBLE_FORCE_COLOR=1 wget --user nagiosadmin --password Password1change --no-check-certificate --header=''Host: nagios.example.com'' -O - -o /dev/null http://nagios.example.com/nagios/ | grep ''Nagios'' '
+
+after_success:
+  # Clean up.
+  - 'sudo docker stop "$(cat ${container_id})"'
+
+#notifications:
+#  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+

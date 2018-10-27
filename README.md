@@ -104,6 +104,8 @@ Add nagios servers to the monitoring-servers group in the Ansible inventory. Exa
 [monitoring-servers]  
 monitor.example.com  
 
+The nagios URL will have this format: http://monitor.example.com/nagios/ 
+
 ## License
 
 BSD

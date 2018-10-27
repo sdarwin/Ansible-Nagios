@@ -17,46 +17,17 @@
   when: ansible_os_family == 'RedHat'
 
 - name: install apache
-  yum: pkg={{ item }} state=present
-  with_items:
-   - php
-   - httpd
-   - libsemanage-python
-   - libselinux-python
+  yum:
+    name: ['php','httpd','libsemanage-python','libselinux-python'] 
 
 - name: Install Nagios prerequisites for CentOS
-  yum: pkg={{ item }} state=present
-  with_items:
-   - gcc
-   - glibc
-   - glibc-common
-   - gd
-   - gd-devel
-   - make
-   - perl
-   - perl-devel
-   - wget
-   - python-passlib
-   - unzip
+  yum:
+    name: ['wget','gcc','glibc','glibc-common','gd','gd-devel','make','perl','perl-devel','wget','python-passlib','unzip'] 
 
 - name: Install plugin prerequisites for CentOS
-  yum: pkg={{ item }} state=present
-  with_items:
-   - openssl-devel
-   - fping
-   - openldap-devel
-   - postgresql-devel
-   - radiusclient-ng-devel
-   - samba-client
-   - libsmbclient
-   - mysql-devel
+  yum:
+    name: "{{ nagios_plugin_packages }}"
 
 - name: Install NRPE prerequisites
-  yum: pkg={{ item }} state=present
-  with_items:
-   - gcc
-   - glibc
-   - glibc-common
-   - make
-   - openssl-devel
-
+  yum:
+    name: ['gcc','glibc','glibc-common','make','openssl-devel']  

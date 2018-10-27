@@ -8,7 +8,7 @@ nagios_download_dir: "{{ ansible_env.HOME }}/nagios"
 nagios_admins_group: 'sysadmin'
 #nagios_users_group: 'users'
 
-nagios_version: 4.3.4
+nagios_version: 4.4.2
 nagios_plugins_version: 2.2.1
 nrpe_version: 3.2.1
 
@@ -131,7 +131,7 @@ nrpe_checks:
     command: "{{nrpe_plugin_dir}}/check_disk"
     warning_condition: '20%'
     critical_condition: '10%'
-    parameters: "-A -i '.gvfs' -i /run/user -i /run/lxcfs -i /run/docker -i /var/lib/docker -i /var/lib/kubelet"
+    parameters: "-A -i '.gvfs' -i /run/user -i /run/lxcfs -i /run/docker -i /var/lib/docker -i /var/lib/kubelet -i '/snap/*'"
   check_swap:
     command: "{{nrpe_plugin_dir}}/check_swap"
     warning_condition: '30%'

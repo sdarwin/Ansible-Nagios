@@ -4,8 +4,6 @@
 - name: Ensure download directory is present
   file: path={{ nagios_download_dir }} state=directory
 
-- include: load-variables.yml
-
 - include: setup-RedHat-family-prerequisites.yml
   when: ansible_os_family == 'RedHat'
 
@@ -48,7 +46,7 @@
     name: cgi
     state: present
   notify: restart apache
-  when: ansible_distribution == 'Ubuntu' and ( ansible_distribution_version == '14.04' or ansible_distribution_version == '16.04' )
+  when: ansible_distribution == 'Ubuntu' and  ansible_distribution_major_version|int > 12
 
 - name: Enable CGI on Debian
   apache2_module:

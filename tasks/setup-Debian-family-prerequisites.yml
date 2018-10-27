@@ -5,65 +5,52 @@
     cache_valid_time: 3600
 
 - name: install apache, Ubuntu 12, 14
-  apt: pkg={{ item }} state=present 
-  with_items:
-   - apache2
-   - php5-gd
-   - libgd2-xpm-dev
-   - libapache2-mod-php5
-   - unzip
+  apt:
+    name: ['apache2','php5-gd','libgd2-xpm-dev','libapache2-mod-php5','unzip'] 
   when: ansible_distribution == 'Ubuntu' and ( ansible_distribution_version == '12.04' or ansible_distribution_version == '14.04' )
 
 - name: install apache, Ubuntu 16
-  apt: pkg={{ item }} state=present 
-  with_items:
-   - apache2
-   - php-gd
-   - libgd2-xpm-dev
-   - libapache2-mod-php
-   - unzip
+  apt:
+    name: ['apache2','php-gd','libgd2-xpm-dev','libapache2-mod-php','unzip'] 
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04' 
 
+- name: install apache, Ubuntu 18
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - apache2
+    - php-gd
+    - libgd-dev
+    - libapache2-mod-php
+    - unzip
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '18.04'
+
 - name: install apache, Debian
-  apt: pkg={{ item }} state=present 
-  with_items:
-   - apache2
-   - php5-gd
-   - libgd2-xpm-dev
-   - libapache2-mod-php5
-   - unzip
-  when: ansible_distribution == 'Debian'  
+  apt:
+    name: ['apache2','php5-gd','libgd2-xpm-dev','libapache2-mod-php5','unzip'] 
+  when: ansible_distribution == 'Debian'  and ansible_distribution_major_version|int < 9 
+
+- name: install apache, Debian
+  apt:
+    name: ['apache2','php-gd','libgd2-xpm-dev','libapache2-mod-php','unzip'] 
+  when: ansible_distribution == 'Debian'  and ansible_distribution_major_version|int > 8
 
 - name: Install Nagios prerequisites for Ubuntu
-  apt: pkg={{ item }} state=present
-  with_items:
-   #- linux-headers-{{ ansible_kernel }}
-   - build-essential
-   - python-passlib
+  apt:
+    name: ['build-essential','python-passlib','wget'] 
 
 - name: Install Plugin prerequisites for Debian family
-  apt: pkg={{ item }} state=present
-  with_items:
-   - libssl-dev
-   - dnsutils
-   - fping
-   - libldap2-dev
-   - libpq-dev
-   - smbclient
-   - gawk
-   - libmysqlclient-dev
+  apt:
+    name: "{{ nagios_plugin_packages }}" 
 
 #not supported on 16.04
 - name: Install Plugin prerequisites for Ubuntu
-  apt: pkg={{ item }} state=present
-  with_items:
-   - libradiusclient-ng-dev
+  apt:
+    name: ['libradiusclient-ng-dev'] 
   when: ansible_distribution == 'Ubuntu' and ( ansible_distribution_version == '12.04' or ansible_distribution_version == '14.04' )
 
 - name: Install NRPE prerequisites
-  apt: pkg={{ item }} state=present
-  with_items:
-   - build-essential
-   - openssl
-   - libssl-dev
+  apt:
+    name: ['build-essential','openssl','libssl-dev'] 
 
