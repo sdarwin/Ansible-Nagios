@@ -36,8 +36,27 @@
   notify: restart apache
   when: ansible_distribution == "Debian" and ansible_distribution_major_version == "7"
 
+
+- name: Check if /etc/init.d/nagios exists 
+  stat:
+    path: /etc/init.d/nagios
+  register: init_d_nagios_stat
+
+- name: Check if /lib/systemd/system/nagios.service exists 
+  stat:
+    path: /lib/systemd/system/nagios.service
+  register: nagios_service_stat
+
 - name: Make install-init
-  shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-init creates=/etc/init.d/nagios
+  shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-init 
+  when:
+    - init_d_nagios_stat.stat.exists == False
+    - nagios_service_stat.stat.exists == False
+
+- name: re-check if /etc/init.d/nagios exists
+  stat:
+    path: /etc/init.d/nagios
+  register: init_d_nagios_stat_2
 
 - name: insert/update /etc/init.d/nagios
   lineinfile:
@@ -48,6 +67,7 @@
   with_items:
     - { regexp: '^# Default-Start:\s*2 3 4 5', line: '# Default-Start:        2 3 4 5' }
     - { regexp: '^# Default-Stop:\s*0 1 6', line: '# Default-Stop:         0 1 6' }
+  when: init_d_nagios_stat_2.stat.exists == True
 
 - name: Set htpasswd for gui users
   htpasswd: path=/usr/local/nagios/etc/htpasswd.users name={{ item.user }} password={{ item.pass }} state=present

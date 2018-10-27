@@ -1,5 +1,21 @@
 ---
-# tasks file for tester2
+
+# Variables ##########
+
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}-family.yml"
+
+- name: Include Distribution version specific variables
+  include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+
+- name: set facts based on defaults
+  set_fact:
+    "{{ item[8:] }}": "{{  vars[item[8:]] | default(vars[item]) }}"
+  when: item is match("^default_")
+  with_items:
+    "{{ vars }}"
+
+##########
 
 - name: Include client
   include: client.yml 

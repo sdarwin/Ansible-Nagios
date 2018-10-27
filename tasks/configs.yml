@@ -68,10 +68,12 @@
 - name: Update nagios.cfg, comment out localhost
   become: true
   notify: restart nagios
-  lineinfile: >
-    dest={{nagios_base_dir}}/etc/nagios.cfg
-    line="#cfg_file={{nagios_object_dir}}/{{item}}.cfg"
-    regexp="^cfg_file\={{nagios_object_dir}}/{{item}}\.cfg"
+  lineinfile: 
+    path: "{{nagios_base_dir}}/etc/nagios.cfg"
+    line: "#cfg_file={{nagios_object_dir}}/{{item}}.cfg"
+    #regexp: "^cfg_file\={{nagios_object_dir}}/{{item}}\.cfg"
+    regexp: "^cfg_file={{nagios_object_dir}}/{{item}}.cfg"
+    backrefs: yes
   with_items:
     - localhost
   when: nagios_removelocalhost is defined or 'localhost' in groups['all']
