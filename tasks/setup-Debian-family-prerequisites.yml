@@ -42,7 +42,7 @@
 
 - name: Install Plugin prerequisites for Debian family
   apt:
-    name: "{{ nagios_plugin_packages }}" 
+    name: "{{ default_nagios_plugin_packages }}" 
 
 #not supported on 16.04
 - name: Install Plugin prerequisites for Ubuntu
