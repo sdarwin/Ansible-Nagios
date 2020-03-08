@@ -31,15 +31,15 @@
 
 - include: build-plugins.yml
 
-- name: Activate Nagios site on Ubuntu 
+- name: Activate Nagios site on Ubuntu
   file: src=/etc/apache2/conf-available/nagios.conf dest=/etc/apache2/conf-enabled/nagios.conf state=link owner=root group=root
   notify: restart apache
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int > 12 
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int > 12
 
 - name: Activate Nagios site on Debian
   file: src=/etc/apache2/conf-available/nagios.conf dest=/etc/apache2/conf-enabled/nagios.conf state=link owner=root group=root
   notify: restart apache
-  when: ansible_distribution == 'Debian' and ansible_distribution_major_version|int > 7 
+  when: ansible_distribution == 'Debian' and ansible_distribution_major_version|int > 7
 
 - name: Enable CGI on Ubuntu
   apache2_module:
@@ -53,7 +53,7 @@
     name: cgi
     state: present
   notify: restart apache
-  when: ansible_distribution == 'Debian' 
+  when: ansible_distribution == 'Debian'
 
 - name: Fix Nagios startup on Debian
   shell: cd /etc/rc2.d && ln -s ../init.d/nagios S18nagios creates=/etc/rc2.d/S18nagios
@@ -66,7 +66,7 @@
 
 - name: Check if SELinux is running and has the mode key
   set_fact: check_selinux=true
-  when: ansible_selinux != False and 'mode' in ansible_selinux.keys()
+  when: ansible_selinux and 'mode' in ansible_selinux.keys()
 
 - name: Store selinux mode in current_selinux_mode variable
   set_fact:
@@ -89,4 +89,3 @@
 - name: Ensure Nagios is started
   service: name=nagios state=started enabled=yes
   notify: pauser
-

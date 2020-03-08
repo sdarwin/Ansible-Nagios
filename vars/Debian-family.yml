@@ -28,4 +28,3 @@ default_nagios_plugin_packages:
  - smbclient
  - gawk
  - libmysqlclient-dev
-

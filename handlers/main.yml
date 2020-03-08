@@ -1,7 +1,7 @@
 ---
-- name: pauser 
+- name: pauser
   pause: seconds=2
-  
+
 - name: restart apache
   service: name={{ nagios_apache_service }} state=restarted
 
@@ -11,5 +11,4 @@
 
 - name: restart nrpe
   become: true
-  service: name={{nrpe_service_name}} state=restarted
-
+  service: name={{ nrpe_service_name }} state=restarted

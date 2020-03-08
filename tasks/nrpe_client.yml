@@ -20,7 +20,10 @@
   shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nrpe_src }}.tar.gz creates={{ nagios_download_dir }}/{{ nrpe_src }}
 
 - name: Configure NRPE
-  shell: cd {{ nagios_download_dir }}/{{ nrpe_src }} && ./configure --with-ssl=/usr/bin/openssl --with-ssl-lib=/usr/lib/x86_64-linux-gnu creates={{ nagios_download_dir }}/{{ nrpe_src }}/Makefile
+  shell: ./configure --with-ssl=/usr/bin/openssl --with-ssl-lib=/usr/lib/x86_64-linux-gnu # noqa 305
+  args:
+    chdir: "{{ nagios_download_dir }}/{{ nrpe_src }}"
+    creates: "{{ nagios_download_dir }}/{{ nrpe_src }}/Makefile"
 
 - name: Make NRPE
   shell: cd {{ nagios_download_dir }}/{{ nrpe_src }} && make all creates={{ nagios_download_dir }}/{{ nrpe_src }}/src/check_nrpe
@@ -29,4 +32,10 @@
   file: path={{ nrpe_client_plugins_dir }} state=directory
 
 - name: Copy check_nrpe
-  shell: cp {{ nagios_download_dir }}/{{ nrpe_src }}/src/check_nrpe {{ nrpe_client_plugins_dir }}/check_nrpe creates={{ nrpe_client_plugins_dir }}/check_nrpe
+  copy:
+    src: "{{ nagios_download_dir }}/{{ nrpe_src }}/src/check_nrpe"
+    dest: "{{ nrpe_client_plugins_dir }}/check_nrpe"
+    mode: '0755'
+    owner: "{{ nagios_user }}"
+    group: "{{ nagios_group }}"
+    remote_src: yes

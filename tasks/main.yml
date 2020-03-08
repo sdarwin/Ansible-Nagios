@@ -1,5 +1,4 @@
 ---
-
 # Variables ##########
 
 - name: Include OS-specific variables.
@@ -18,11 +17,10 @@
 ##########
 
 - name: Include client
-  include: client.yml 
-  when: run_nagios_client is defined 
+  include: client.yml
+  when: run_nagios_client is defined
 
 
 - name: Include server
-  include: server.yml 
-  when: run_nagios_server is defined 
-
+  include: server.yml
+  when: run_nagios_server is defined

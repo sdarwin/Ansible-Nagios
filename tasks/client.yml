@@ -1,5 +1,5 @@
 ---
-- name: Update repositories cache 
+- name: Update repositories cache
   apt:
     update_cache: yes
     cache_valid_time: 3600
@@ -33,12 +33,12 @@
 - name: Install NRPE
   package: >
     name={{ nrpe_package_name }}
-    state=latest
+    state=present
 
 - name: Install Plugins
-  package : >
+  package: >
     name={{ item }}
-    state=latest
+    state=present
   when: ansible_os_family == 'RedHat'
   with_items:
    - nagios-plugins-all
@@ -61,9 +61,8 @@
   file: path={{ nrpe_conf_dir }}/nrpe.d state=directory
 
 - name: NRPE checks
-  template: > 
+  template: >
     src=nrpe_check.cfg
     dest={{ nrpe_conf_dir }}/nrpe.d/{{ item.key }}.cfg
   with_dict: "{{ nrpe_checks }}"
   notify: restart nrpe
-

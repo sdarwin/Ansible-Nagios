@@ -18,11 +18,11 @@
 
 - name: install apache
   yum:
-    name: ['php','httpd','libsemanage-python','libselinux-python'] 
+    name: ['php', 'httpd', 'libsemanage-python', 'libselinux-python']
 
 - name: Install Nagios prerequisites for CentOS
   yum:
-    name: ['wget','gcc','glibc','glibc-common','gd','gd-devel','make','perl','perl-devel','wget','python-passlib','unzip'] 
+    name: ['wget', 'gcc', 'glibc', 'glibc-common', 'gd', 'gd-devel', 'make', 'perl', 'perl-devel', 'wget', 'python-passlib', 'unzip']
 
 - name: Install plugin prerequisites for CentOS
   yum:
@@ -30,4 +30,4 @@
 
 - name: Install NRPE prerequisites
   yum:
-    name: ['gcc','glibc','glibc-common','make','openssl-devel']  
+    name: ['gcc', 'glibc', 'glibc-common', 'make', 'openssl-devel']

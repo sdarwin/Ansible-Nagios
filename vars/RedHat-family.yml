@@ -40,4 +40,3 @@ default_nagios_plugin_packages:
  - samba-client
  - libsmbclient
  - mysql-devel
-
