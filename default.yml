@@ -3,12 +3,12 @@
       #remote_user: ansible
       become: true
       roles:
-        #this is the Ansible Galaxy name, you could change it to ansible-nagios if directly downloading from github
+        #this is the Ansible Galaxy name, you could change it to Ansible-Nagios if directly downloading from github
         - { role: 'sdarwin.nagios', run_nagios_client: true }
 
     - hosts: monitoring-servers
       #remote_user: ansible
       become: true
       roles:
-        #this is the Ansible Galaxy name, you could change it to ansible-nagios if directly downloading from github
+        #this is the Ansible Galaxy name, you could change it to Ansible-Nagios if directly downloading from github
         - { role: 'sdarwin.nagios', run_nagios_server: true }

@@ -14,7 +14,7 @@
     name: ['apache2', 'php-gd', 'libgd2-xpm-dev', 'libapache2-mod-php', 'unzip' ]
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04'
 
-- name: install apache, Ubuntu 18
+- name: install apache, Ubuntu > 17 
   apt:
     name: "{{ packages }}"
   vars:
@@ -24,7 +24,7 @@
     - libgd-dev
     - libapache2-mod-php
     - unzip
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '18.04'
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int > 17
 
 - name: install apache, Debian
   apt:
