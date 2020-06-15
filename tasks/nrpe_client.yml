@@ -20,7 +20,7 @@
   shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nrpe_src }}.tar.gz creates={{ nagios_download_dir }}/{{ nrpe_src }}
 
 - name: Configure NRPE
-  shell: ./configure --with-ssl=/usr/bin/openssl --with-ssl-lib=/usr/lib/x86_64-linux-gnu # noqa 305
+  shell: ./configure --with-ssl=/usr/bin/openssl --with-ssl-lib=/usr/lib/x86_64-linux-gnu  # noqa 305
   args:
     chdir: "{{ nagios_download_dir }}/{{ nrpe_src }}"
     creates: "{{ nagios_download_dir }}/{{ nrpe_src }}/Makefile"
@@ -38,4 +38,4 @@
     mode: '0755'
     owner: "{{ nagios_user }}"
     group: "{{ nagios_group }}"
-    remote_src: yes
+    remote_src: true

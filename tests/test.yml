@@ -8,7 +8,7 @@
 
     - name: Install test dependencies (Debian).
       apt:
-        name: 
+        name:
           - netcat
           - iproute2
           - curl
@@ -17,8 +17,8 @@
     - name: Install test dependencies (RedHat).
       yum:
         name:
-        - nc
-        - curl
+          - nc
+          - curl
       when: ansible_os_family == 'RedHat'
 
     - name: gather facts
@@ -27,9 +27,9 @@
 - hosts: all
   become: true
   roles:
-   - { role: 'role_under_test', run_nagios_client: true }
+    - {role: 'role_under_test', run_nagios_client: true}
 
 - hosts: monitoring-servers
   become: true
   roles:
-    - { role: 'role_under_test', run_nagios_server: true }
+    - {role: 'role_under_test', run_nagios_server: true}

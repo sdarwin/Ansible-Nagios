@@ -9,11 +9,11 @@
     group={{ nagios_group }}
     mode=640
   with_items:
-    - { src: hosts.cfg, dest: hosts.cfg }
-    - { src: hostgroups.cfg, dest: hostgroups.cfg }
-    - { src: services.cfg, dest: services.cfg }
-    - { src: commands.cfg, dest: additional_commands.cfg }
-    - { src: additional_timeperiods.cfg, dest: additional_timeperiods.cfg }
+    - {src: hosts.cfg, dest: hosts.cfg}
+    - {src: hostgroups.cfg, dest: hostgroups.cfg}
+    - {src: services.cfg, dest: services.cfg}
+    - {src: commands.cfg, dest: additional_commands.cfg}
+    - {src: additional_timeperiods.cfg, dest: additional_timeperiods.cfg}
 
 - name: Install contacts.cfg
   become: true
@@ -25,7 +25,7 @@
     group={{ nagios_group }}
     mode=640
   with_items:
-    - { src: contacts.cfg, dest: contacts.cfg }
+    - {src: contacts.cfg, dest: contacts.cfg}
   when: users is defined
 
 - name: Install more config files
@@ -38,7 +38,7 @@
     group={{ nagios_group }}
     mode=775
   with_items:
-    - { src: cgi.cfg, dest: cgi.cfg }
+    - {src: cgi.cfg, dest: cgi.cfg}
 
 - name: Update nagios.cfg with config files
   become: true
@@ -64,16 +64,16 @@
     regexp="^cfg_dir={{ nagios_object_dir }}"
   when: nagios_cfg_dir_enabled
 
-#if there is a conflict: two localhost definitions
+# if there is a conflict: two localhost definitions
 - name: Update nagios.cfg, comment out localhost
   become: true
   notify: restart nagios
   lineinfile:
     path: "{{ nagios_base_dir }}/etc/nagios.cfg"
     line: "#cfg_file={{ nagios_object_dir }}/{{ item }}.cfg"
-    #regexp: "^cfg_file\={{ nagios_object_dir }}/{{item}}\.cfg"
+    # regexp: "^cfg_file\={{ nagios_object_dir }}/{{item}}\.cfg"
     regexp: "^cfg_file={{ nagios_object_dir }}/{{ item }}.cfg"
-    backrefs: yes
+    backrefs: true
   with_items:
     - localhost
   when: nagios_removelocalhost is defined or 'localhost' in groups['all']

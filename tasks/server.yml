@@ -10,7 +10,7 @@
 - include: setup-Debian-family-prerequisites.yml
   when: ansible_os_family == 'Debian'
 
-#nagios prerequisite
+# nagios prerequisite
 - name: Enable version
   apache2_module:
     name: version

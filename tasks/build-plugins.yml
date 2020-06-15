@@ -7,7 +7,7 @@
   shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nagios_pluginssrc }}.tar.gz creates={{ nagios_download_dir }}/{{ nagios_pluginssrc }}
 
 - name: Configure Plugins
-  shell: ./configure --with-nagios-user={{ nagios_monitoring_user }} --with-nagios-group=nagios --with-openssl=/usr/bin/openssl # noqa 305
+  shell: ./configure --with-nagios-user={{ nagios_monitoring_user }} --with-nagios-group=nagios --with-openssl=/usr/bin/openssl  # noqa 305
   args:
     chdir: "{{ nagios_download_dir }}/{{ nagios_pluginssrc }}"
     creates: "{{ nagios_download_dir }}/{{ nagios_pluginssrc }}/Makefile"

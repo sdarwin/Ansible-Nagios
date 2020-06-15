@@ -6,7 +6,7 @@ nrpe_plugin_dir: /usr/lib/nagios/plugins
 nagios_download_dir: "{{ ansible_env.HOME }}/nagios"
 
 nagios_admins_group: 'sysadmin'
-#nagios_users_group: 'users'
+# nagios_users_group: 'users'
 
 nagios_version: 4.4.6
 nagios_plugins_version: 2.3.3
@@ -38,13 +38,13 @@ nagios_users:
 #### nrpe-client ####
 
 # Directory that will be used as the location for the download
-#actually, already defined above.
-#download_dir: "{{ ansible_env.HOME }}/nrpe"
+# actually, already defined above.
+# download_dir: "{{ ansible_env.HOME }}/nrpe"
 
 # This NRPE package is only used for the plugin, as the nrpe plugin on some distributions
 # require the distributions Nagios package to be installed.
-#nrpe_url: "http://sourceforge.net/projects/nagios/files/nrpe-{{ nrpe_version | regex_replace('(\\d+)\\..*', '\\1') }}.x/nrpe-{{ nrpe_version }}/nrpe-{{ nrpe_version }}.tar.gz"
-#nrpe_url: "https://downloads.sourceforge.net/project/nagios/nrpe-{{ nrpe_version | regex_replace('(\\d+)\\..*', '\\1') }}.x/nrpe-{{ nrpe_version }}.tar.gz"
+# nrpe_url: "http://sourceforge.net/projects/nagios/files/nrpe-{{ nrpe_version | regex_replace('(\\d+)\\..*', '\\1') }}.x/nrpe-{{ nrpe_version }}/nrpe-{{ nrpe_version }}.tar.gz"
+# nrpe_url: "https://downloads.sourceforge.net/project/nagios/nrpe-{{ nrpe_version | regex_replace('(\\d+)\\..*', '\\1') }}.x/nrpe-{{ nrpe_version }}.tar.gz"
 nrpe_url: "https://downloads.sourceforge.net/project/nagios/nrpe-{{ nrpe_version | regex_replace('(\\d+)\\..*', '\\1') }}.x//nrpe-{{ nrpe_version }}/nrpe-{{ nrpe_version }}.tar.gz"
 nrpe_src: "nrpe-{{ nrpe_version }}"
 
@@ -69,29 +69,29 @@ nagios_user: nagios
 # id of nagios group
 nagios_group: nagios
 
-#define service checks per hostgroup here. Groups themselves are created by the ansible inventory.
+# define service checks per hostgroup here. Groups themselves are created by the ansible inventory.
 nagios_host_groups:
   - name: 'all'
     checks:
       - {command: 'check_ssh', description: 'SSH Service Check'}
       - {command: 'check_disk', description: 'Check Disk Space'}
-      #- {command: 'check_swap', description: 'Check Swap Space'}
+      # - {command: 'check_swap', description: 'Check Swap Space'}
       - {command: 'check_load', description: 'Check Load'}
       - {command: 'check_mem', description: 'Check Memory'}
-  #- name: 'webservers'
-  #  checks:
-  #    - {command: 'check_http', description: 'Check HTTP'}
+# - name: 'webservers'
+#   checks:
+#    - {command: 'check_http', description: 'Check HTTP'}
 
-#define service checks per host here. Hosts themselves are created by the ansible inventory.
+# define service checks per host here. Hosts themselves are created by the ansible inventory.
 nagios_hosts: ""
-#nagios_hosts:
-#  - name: 'web1'
-#    checks:
-#      - {command: 'check_http', description: 'check website'}
+# nagios_hosts:
+#   - name: 'web1'
+#     checks:
+#       - {command: 'check_http', description: 'check website'}
 
 nagios_commands:
-  #check_ssh is already in the default installation
-  #- {name: 'check_ssh', command: '$USER1$/check_ssh $ARG1$ $HOSTADDRESS$'}
+  # check_ssh is already in the default installation
+  # - {name: 'check_ssh', command: '$USER1$/check_ssh $ARG1$ $HOSTADDRESS$'}
   - {name: 'check_disk', command: '$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_disk'}
   - {name: 'check_load', command: '$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_load'}
   - {name: 'check_swap', command: '$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_swap'}
@@ -150,21 +150,21 @@ nagios_allowed_hosts:
   - ::1
 
 # Set this to remove the Ansible "all" group. In that case, be sure to add at least one new Ansible group, and one new service check in the nagios_host_groups variable
-#nagios_remove_all_group: "yes"
+# nagios_remove_all_group: "yes"
 nagios_remove_all_group: "no"
 
-#Probably leave this as-is. It should match your top-level ansible playbook, such as "- hosts: monitoring-servers"
+# Probably leave this as-is. It should match your top-level ansible playbook, such as "- hosts: monitoring-servers"
 nagios_monitoring_servers_group_name: "monitoring-servers"
 
-#optionally define more timeperiods.
+# optionally define more timeperiods.
 nagios_timeperiods: ""
-#nagios_timeperiods:
-#  - name: "webchecks"
-#    alias: "webchecks"
-#    sunday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
-#    monday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
-#    tuesday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
-#    wednesday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
-#    thursday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
-#    friday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
-#    saturday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
+# nagios_timeperiods:
+#   - name: "webchecks"
+#     alias: "webchecks"
+#     sunday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
+#     monday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
+#     tuesday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
+#     wednesday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
+#     thursday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
+#     friday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
+#     saturday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"

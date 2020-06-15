@@ -7,7 +7,7 @@
   shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nagios_src }}.tar.gz creates={{ nagios_download_dir }}/{{ nagios_src }}
 
 - name: ./configure
-  shell: ./configure --with-command-group={{ nagios_monitoring_command_group }} -with-httpd_conf={{ nagios_with_httpd_conf }} --with-nagios-user={{ nagios_monitoring_user }} # noqa 204 305
+  shell: ./configure --with-command-group={{ nagios_monitoring_command_group }} -with-httpd_conf={{ nagios_with_httpd_conf }} --with-nagios-user={{ nagios_monitoring_user }}  # noqa 204 305
   args:
     chdir: "{{ nagios_download_dir }}/{{ nagios_src }}"
     creates: "{{ nagios_download_dir }}/{{ nagios_src }}/Makefile"
@@ -67,8 +67,8 @@
     line: "{{ item.line }}"
     insertbefore: "### END INIT INFO"
   with_items:
-    - { regexp: '^# Default-Start:\s*2 3 4 5', line: '# Default-Start:        2 3 4 5' }
-    - { regexp: '^# Default-Stop:\s*0 1 6', line: '# Default-Stop:         0 1 6' }
+    - {regexp: '^# Default-Start:\s*2 3 4 5', line: '# Default-Start:        2 3 4 5'}
+    - {regexp: '^# Default-Stop:\s*0 1 6', line: '# Default-Stop:         0 1 6'}
   when: init_d_nagios_stat_2.stat.exists
 
 - name: Set htpasswd for gui users
@@ -80,6 +80,6 @@
   when: nagios_admins_group in item.groups
   with_items: "{{ users | default([]) }}"
 
-#Let's move this to the end of the playbook, so that configs can be set up first
-#- name: Ensure Nagios is started
+# Let's move this to the end of the playbook, so that configs can be set up first
+# - name: Ensure Nagios is started
 #  service: name=nagios state=started enabled=yes
