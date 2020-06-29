@@ -11,8 +11,7 @@
   set_fact:
     "{{ item[8:] }}": "{{  vars[item[8:]] | default(vars[item]) }}"
   when: item is match("^default_")
-  with_items:
-    "{{ vars }}"
+  with_items: "{{ vars | list }}"
 
 ##########
 
