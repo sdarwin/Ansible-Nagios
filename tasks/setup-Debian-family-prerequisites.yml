@@ -4,45 +4,15 @@
     update_cache: true
     cache_valid_time: 3600
 
-- name: install apache, Ubuntu 12, 14
+- name: Install apache packages
   apt:
-    name: ['apache2', 'php5-gd', 'libgd2-xpm-dev', 'libapache2-mod-php5', 'unzip']
-  when: ansible_distribution == 'Ubuntu' and ( ansible_distribution_version == '12.04' or ansible_distribution_version == '14.04' )
+    name: "{{ nagios_apache_packages }}"
+    state: present
 
-- name: install apache, Ubuntu 16
+- name: Install nagios prerequisite packages
   apt:
-    name: ['apache2', 'php-gd', 'libgd2-xpm-dev', 'libapache2-mod-php', 'unzip']
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04'
-
-- name: install apache, Ubuntu > 17
-  apt:
-    name: "{{ packages }}"
-  vars:
-    packages:
-      - apache2
-      - php-gd
-      - libgd-dev
-      - libapache2-mod-php
-      - unzip
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_major_version|int > 17
-
-- name: install apache, Debian
-  apt:
-    name: ['apache2', 'php5-gd', 'libgd2-xpm-dev', 'libapache2-mod-php5', 'unzip']
-  when: ansible_distribution == 'Debian'  and ansible_distribution_major_version|int < 9
-
-- name: install apache, Debian
-  apt:
-    name: ['apache2', 'php-gd', 'libgd2-xpm-dev', 'libapache2-mod-php', 'unzip']
-  when: ansible_distribution == 'Debian'  and ansible_distribution_major_version|int > 8
-
-- name: Install Nagios prerequisites for Ubuntu
-  apt:
-    name: ['build-essential', 'python-passlib', 'wget']
-
-- name: Install Plugin prerequisites for Debian family
-  apt:
-    name: "{{ nagios_plugin_packages }}"
+    name: "{{ nagios_prerequisite_packages }}"
+    state: present
 
 # not supported on 16.04
 - name: Install Plugin prerequisites for Ubuntu
@@ -52,4 +22,15 @@
 
 - name: Install NRPE prerequisites
   apt:
-    name: ['build-essential', 'openssl', 'libssl-dev']
+    name: "{{ nagios_nrpe_prerequisite_packages }}"
+    state: present
+
+- name: Install nagios python packages
+  apt:
+    name: "{{ nagios_python_packages }}"
+    state: present
+
+- name: install passlib
+  pip:
+    name:
+      - passlib

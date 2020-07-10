@@ -1,5 +1,4 @@
 ---
-
 - name: install epel repo
   yum:
     name: "{{ epel_repo_url }}"
@@ -16,18 +15,49 @@
     - epel
   when: ansible_os_family == 'RedHat'
 
+# To enable powertools, see next step
+- name: Install dnf-plugins-core
+  yum:
+    name: dnf-plugins-core
+    state: present
+  when:
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version|int > 7
+
+# For certain Perl modules to be available
+- name: Install powertools
+  command: dnf config-manager --set-enabled PowerTools
+  when:
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version|int > 7
+  changed_when: false
+
 - name: install apache
   yum:
-    name: ['php', 'httpd', 'libsemanage-python', 'libselinux-python']
+    name: "{{ nagios_apache_packages }}"
+    state: present
 
 - name: Install Nagios prerequisites for CentOS
   yum:
-    name: ['wget', 'gcc', 'glibc', 'glibc-common', 'gd', 'gd-devel', 'make', 'perl', 'perl-devel', 'wget', 'python-passlib', 'unzip']
+    name: "{{ nagios_prerequisite_packages }}"
+    state: present
 
 - name: Install plugin prerequisites for CentOS
   yum:
     name: "{{ nagios_plugin_packages }}"
+    state: present
 
 - name: Install NRPE prerequisites
   yum:
-    name: ['gcc', 'glibc', 'glibc-common', 'make', 'openssl-devel']
+    name: "{{ nagios_nrpe_prerequisite_packages }}"
+    state: present
+
+- name: Install nagios python packages
+  yum:
+    name: "{{ nagios_python_packages }}"
+    state: present
+
+- name: install passlib
+  pip:
+    name:
+      - passlib

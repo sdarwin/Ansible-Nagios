@@ -20,12 +20,25 @@ nrpe_conf_dir: /etc/nagios
 # nrpe_plugin_dir: /usr/lib/nagios/plugins
 
 default_nagios_plugin_packages:
- - libssl-dev
- - dnsutils
- - fping
- - libldap2-dev
- - libpq-dev
- - smbclient
- - gawk
- - libmysqlclient-dev
- - unzip
+  - libssl-dev
+  - dnsutils
+  - fping
+  - libldap2-dev
+  - libpq-dev
+  - smbclient
+  - gawk
+  - libmysqlclient-dev
+  - unzip
+
+default_nagios_prerequisite_packages:
+  - build-essential
+  - wget
+
+default_nagios_nrpe_prerequisite_packages:
+  - build-essential
+  - openssl
+  - libssl-dev
+
+default_nagios_python_packages:
+  - python3-pip
+  - python3-setuptools

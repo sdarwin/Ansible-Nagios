@@ -1,2 +1,6 @@
 ---
 nagios_with_httpd_conf: /etc/httpd/conf.d
+
+default_nagios_python_packages:
+  - python-pip
+  - python-setuptools

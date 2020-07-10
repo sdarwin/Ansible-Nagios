@@ -1,2 +1,13 @@
 ---
 nagios_with_httpd_conf: /etc/apache2/conf.d
+nagios_apache_packages:
+  - apache2
+  - php5-gd
+  - libgd2-xpm-dev
+  - libapache2-mod-php5
+  - unzip
+default_nagios_python_packages:
+  - python-pip
+  - python-setuptools
+  - python3-pip
+  - python3-setuptools

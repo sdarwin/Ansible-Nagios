@@ -1,0 +1,24 @@
+---
+nagios_with_httpd_conf: /etc/httpd/conf.d
+
+nrpe_user: nrpe
+nrpe_group: nrpe
+
+default_nagios_plugin_packages:
+  - openssl-devel
+  - fping
+  - openldap-devel
+  - postgresql-devel
+  - samba-client
+  - libsmbclient
+  - mysql-devel
+
+default_nagios_apache_packages:
+  - php
+  - httpd
+  - python3-libsemanage
+  - python3-libselinux
+
+default_nagios_python_packages:
+  - python3-pip
+  - python3-setuptools

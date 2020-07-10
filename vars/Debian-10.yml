@@ -12,9 +12,10 @@ default_nagios_plugin_packages:
   - default-libmysqlclient-dev
 default_nagios_apache_packages:
   - apache2
-  - php-gd
-  - libgd2-xpm-dev
-  - libapache2-mod-php
+  - php7.3-gd
+  # - libgd2-xpm-dev
+  - libgd-dev
+  - libapache2-mod-php7.3
   - unzip
 default_nagios_python_packages:
   - python-pip
