@@ -11,8 +11,8 @@ env:
       MOLECULE_DOCKER_COMMAND: /usr/sbin/init
     - MOLECULE_DISTRO: centos7
       MOLECULE_DOCKER_COMMAND: /usr/lib/systemd/systemd
-    - MOLECULE_DISTRO: centos6
-      MOLECULE_DOCKER_COMMAND: /sbin/init
+    # - MOLECULE_DISTRO: centos6
+    #   MOLECULE_DOCKER_COMMAND: /sbin/init
     - MOLECULE_DISTRO: focal
       MOLECULE_DOCKER_COMMAND: /usr/sbin/init
     - MOLECULE_DISTRO: bionic

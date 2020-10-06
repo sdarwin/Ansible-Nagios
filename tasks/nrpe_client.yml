@@ -2,7 +2,12 @@
 # tasks file for nagios
 
 - name: Ensure download directory is present
-  file: path={{ nagios_download_dir }} state=directory
+  file:
+    path: "{{ nagios_download_dir }}"
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
 
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_os_family }}-family.yml"
@@ -29,7 +34,12 @@
   shell: cd {{ nagios_download_dir }}/{{ nrpe_src }} && make all creates={{ nagios_download_dir }}/{{ nrpe_src }}/src/check_nrpe
 
 - name: Ensure plugins directory is present
-  file: path={{ nrpe_client_plugins_dir }} state=directory
+  file:
+    path: "{{ nrpe_client_plugins_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
 
 - name: Copy check_nrpe
   copy:

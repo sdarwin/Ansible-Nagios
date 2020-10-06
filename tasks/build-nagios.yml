@@ -72,11 +72,26 @@
   when: init_d_nagios_stat_2.stat.exists
 
 - name: Set htpasswd for gui users
-  htpasswd: path=/usr/local/nagios/etc/htpasswd.users name={{ item.user }} password={{ item.pass }} state=present
+  htpasswd:
+    path: /usr/local/nagios/etc/htpasswd.users
+    name: "{{ item.user }}"
+    password: "{{ item.pass }}"
+    state: present
+    owner: root
+    group: root
+    mode: 0644
   with_items: "{{ nagios_users | default([]) }}"
 
 - name: Set htpasswd for gui users from users variable
-  htpasswd: crypt_scheme=plaintext path=/usr/local/nagios/etc/htpasswd.users name={{ item.username }} password={{ item.htpasswd }} state=present
+  htpasswd:
+    crypt_scheme: plaintext
+    path: /usr/local/nagios/etc/htpasswd.users
+    name: "{{ item.username }}"
+    password: "{{ item.htpasswd }}"
+    state: present
+    owner: root
+    group: root
+    mode: 0644
   when: nagios_admins_group in item.groups
   with_items: "{{ users | default([]) }}"
 

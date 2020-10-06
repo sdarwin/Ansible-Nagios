@@ -70,16 +70,29 @@
   copy: src=files/check_mem dest={{ nrpe_plugin_dir }}/check_mem mode=755
 
 - name: NRPE config file
-  template: src=nrpe.cfg dest=/etc/nagios/nrpe.cfg
+  template:
+    src: nrpe.cfg
+    dest: /etc/nagios/nrpe.cfg
+    owner: root
+    group: root
+    mode: 0644
   notify: restart nrpe
 
 # for redhat
 - name: nrpe.d dir
-  file: path={{ nrpe_conf_dir }}/nrpe.d state=directory
+  file:
+    path: "{{ nrpe_conf_dir }}/nrpe.d"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
 
 - name: NRPE checks
-  template: >
-    src=nrpe_check.cfg
-    dest={{ nrpe_conf_dir }}/nrpe.d/{{ item.key }}.cfg
+  template:
+    src: nrpe_check.cfg
+    dest: "{{ nrpe_conf_dir }}/nrpe.d/{{ item.key }}.cfg"
+    owner: root
+    group: root
+    mode: 0644
   with_dict: "{{ nrpe_checks }}"
   notify: restart nrpe

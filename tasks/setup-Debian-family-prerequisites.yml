@@ -34,3 +34,4 @@
   pip:
     name:
       - passlib
+  changed_when: false

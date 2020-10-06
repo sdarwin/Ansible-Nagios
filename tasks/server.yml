@@ -2,7 +2,12 @@
 # tasks file for nagios
 
 - name: Ensure download directory is present
-  file: path={{ nagios_download_dir }} state=directory
+  file:
+    path: "{{ nagios_download_dir }}"
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
 
 - include: setup-RedHat-family-prerequisites.yml
   when: ansible_os_family == 'RedHat'
@@ -74,7 +79,14 @@
   when: check_selinux
 
 - name: Check if SELinux is running in enforcing mode and change access
-  file: path=/usr/local/nagios setype=httpd_sys_content_t state=directory recurse=yes
+  file:
+    path: /usr/local/nagios
+    setype: httpd_sys_content_t
+    state: directory
+    recurse: yes
+    owner: root
+    group: root
+    mode: 0755
   when: current_selinux_mode == 'enforcing'
 
 - name: http service state
