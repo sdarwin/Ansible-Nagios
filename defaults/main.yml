@@ -96,6 +96,9 @@ nagios_commands:
   - {name: 'check_load', command: '$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_load'}
   - {name: 'check_swap', command: '$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_swap'}
   - {name: 'check_mem', command: '$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_mem'}
+  - {name: 'check_https', command: '$USER1$/check_http -f follow -S --verify-host -C 21,14 --continue-after-certificate --sni -I $ARG1$ -H $ARG2$ -s $ARG3$ -u $ARG4$'}
+  - {name: 'check_https_certonly', command: '$USER1$/check_http -f follow -S --verify-host -C 21,14 --sni -I $ARG1$ -H $ARG2$ -s $ARG3$ -u $ARG4$ -p $ARG5$'}
+  - {name: 'check_http_full', command: '$USER1$/check_http -f follow --sni -I $ARG1$ -H $ARG2$ -s $ARG3$ -u $ARG4$'}
 
 nagios_cgi_show_context_help: 1
 nagios_cgi_authorized_for_system_information: '*'
