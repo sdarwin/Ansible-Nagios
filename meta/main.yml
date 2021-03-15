@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: nagios
   author: sdarwin
   description: Install Nagios 4.x on Ubuntu or CentOS
   license: BSD

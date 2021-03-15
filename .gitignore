@@ -3,5 +3,5 @@
 *.retry
 .kitchen
 test.txt
-
+/.cache
 

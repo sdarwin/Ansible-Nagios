@@ -12,3 +12,9 @@
 - name: restart nrpe
   become: true
   service: name={{ nrpe_service_name }} state=restarted
+
+- name: restart nrpe osx
+  command: |
+    launchctl unload /Library/LaunchDaemons/homebrew.mxcl.nrpe.plist
+    pkill -f /usr/local/opt/nrpe/bin/nrpe
+    launchctl load /Library/LaunchDaemons/homebrew.mxcl.nrpe.plist

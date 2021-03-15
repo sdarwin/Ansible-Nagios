@@ -83,7 +83,7 @@
     path: /usr/local/nagios
     setype: httpd_sys_content_t
     state: directory
-    recurse: yes
+    recurse: true
     owner: root
     group: root
     mode: 0755

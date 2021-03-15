@@ -1,0 +1,19 @@
+---
+nrpe_user: nagios
+nrpe_group: nagios
+nrpe_conf_dir: /usr/local/etc
+nrpe_pid_file: /var/run/nrpe.pid
+nrpe_server_port: 5666
+nrpe_dont_blame_nrpe: 0
+nrpe_debug: 0
+nrpe_command_timeout: 60
+# nrpe_log_file: /tmp/nrpe.log
+
+#### nrpe checks ####
+
+nrpe_checks:
+  check_disk:
+    command: "{{nrpe_plugin_dir}}/check_disk"
+    warning_condition: '20%'
+    critical_condition: '10%'
+    parameters: "/"
