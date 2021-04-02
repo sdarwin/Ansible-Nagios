@@ -7,3 +7,7 @@
 - name: include mac client
   include: client_macos.yml
   when: ansible_system == 'Darwin'
+
+- name: include windows client
+  include: client_windows.yml
+  when: ansible_system == 'Win32NT'

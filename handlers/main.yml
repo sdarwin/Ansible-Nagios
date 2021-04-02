@@ -18,3 +18,8 @@
     launchctl unload /Library/LaunchDaemons/homebrew.mxcl.nrpe.plist
     pkill -f /usr/local/opt/nrpe/bin/nrpe
     launchctl load /Library/LaunchDaemons/homebrew.mxcl.nrpe.plist
+
+- name: restart nscp
+  win_service:
+    name: nscp
+    state: restarted

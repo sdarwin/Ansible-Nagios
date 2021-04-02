@@ -171,3 +171,30 @@ nagios_timeperiods: ""
 #     thursday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
 #     friday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
 #     saturday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
+#
+
+nsclient_installed_location: 'C:\\Program Files\\NSClient++'
+nsclient_password: 'Pi4j8ZWcUZdecYQu'
+# using nagios_allowed_hosts instead of nsclient_allowed_hosts
+# nsclient_allowed_hosts: '127.0.0.1'
+nsclient_ssl_options: 'no-sslv2,no-sslv3'
+nsclient_verify_mode: 'none'
+nsclient_insecure: 'false'
+nsclient_CheckExternalScripts: 'enabled'
+nsclient_CheckHelpers: 'disabled'
+nsclient_CheckEventLog: 'disabled'
+nsclient_CheckNSCP: 'disabled'
+nsclient_CheckDisk: 'enabled'
+nsclient_CheckSystem: 'enabled'
+nsclient_NRPEServer: 'enabled'
+# replace this with new output from 'openssl dhparam -C 2048'
+# hopefully the standard installer will include the step soon
+nsclient_nrpe_dh_2048_pem: |
+  -----BEGIN DH PARAMETERS-----
+  MIIBCAKCAQEAw4tIrh9hhq2iherQCox2NnCCnIyFq7lMSnEPmDVtPD2+QpjPD0o0
+  90sLF+ATlIuslTs0QJVSrTg6oGZVr+Op4MIeXgk4bPIZIf2Aaw+QzKy5qfO75XjW
+  K93jFVB75L9FqUKRWGvWDSRBe0Iayl+SGX5L1GTMXhy6GzVwo/PRYtFCAgdxe62J
+  hJyho4Ot5xRDzPxDO6ttg+n4HAGxWuugHe0hI3YdL1qjWhT5gIMzVnLAQef01e40
+  frp7q4kNwrgYimvXKGO9kRCtbrG9XR0yHqirN/tknNFtHdGfZMQQ5PDoRGevinYm
+  pzX4yHHv5xQ9VqsiTHNvh6oRG/ra2xDeawIBAg==
+  -----END DH PARAMETERS-----
