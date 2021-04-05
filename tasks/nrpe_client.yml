@@ -20,7 +20,7 @@
 
 - name: Get NRPE
   get_url:
-    timeout: 30 
+    timeout: 30
     url: "{{ nrpe_url }}"
     dest: "{{ nagios_download_dir }}/{{ nrpe_src }}.tar.gz"
   retries: 3
