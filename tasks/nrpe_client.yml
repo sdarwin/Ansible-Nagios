@@ -19,7 +19,14 @@
   when: ansible_os_family == 'Debian'
 
 - name: Get NRPE
-  get_url: timeout=30 url={{ nrpe_url }} dest={{ nagios_download_dir }}/{{ nrpe_src }}.tar.gz
+  get_url:
+    timeout: 30 
+    url: "{{ nrpe_url }}"
+    dest: "{{ nagios_download_dir }}/{{ nrpe_src }}.tar.gz"
+  retries: 3
+  delay: 40
+  register: result
+  until: result.rc == 0
 
 - name: Unpack NRPE source files
   shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nrpe_src }}.tar.gz creates={{ nagios_download_dir }}/{{ nrpe_src }}
