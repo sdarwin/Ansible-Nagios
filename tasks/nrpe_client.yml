@@ -26,7 +26,7 @@
   retries: 3
   delay: 40
   register: result
-  until: result.rc == 0
+  until: result is not failed
 
 - name: Unpack NRPE source files
   shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nrpe_src }}.tar.gz creates={{ nagios_download_dir }}/{{ nrpe_src }}
