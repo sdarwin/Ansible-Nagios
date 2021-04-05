@@ -14,17 +14,17 @@
     nrpe_plugin_dir: /usr/lib64/nagios/plugins
   when: ansible_os_family == "RedHat" and ansible_architecture != "i686"
 
-- name: install epel repo
-  yum:
-    name: "{{ epel_repo_url }}"
+- name: import epel gpg key
+  rpm_key:
+    key: "{{ epel_repo_gpg_key_path }}"
     state: present
   tags:
     - epel
   when: ansible_os_family == 'RedHat'
 
-- name: import epel gpg key
-  rpm_key:
-    key: "{{ epel_repo_gpg_key_path }}"
+- name: install epel repo
+  yum:
+    name: "{{ epel_repo_url }}"
     state: present
   tags:
     - epel
@@ -41,7 +41,8 @@
 
 # For certain Perl modules to be available
 - name: Install powertools
-  command: dnf config-manager --set-enabled PowerTools
+  # command: dnf config-manager --set-enabled PowerTools
+  command: dnf config-manager --set-enabled powertools
   when:
     - ansible_os_family == 'RedHat'
     - ansible_distribution_major_version|int > 7

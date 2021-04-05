@@ -18,7 +18,7 @@ galaxy_info:
         - jessie
         - wheezy
         - stretch
-    - name: EL4
+    - name: EL
       versions:
         - 8
         - 7
