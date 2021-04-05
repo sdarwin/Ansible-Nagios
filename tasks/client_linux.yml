@@ -41,7 +41,8 @@
 
 # For certain Perl modules to be available
 - name: Install powertools
-  command: dnf config-manager --set-enabled PowerTools
+  # command: dnf config-manager --set-enabled PowerTools
+  command: dnf config-manager --set-enabled powertools
   when:
     - ansible_os_family == 'RedHat'
     - ansible_distribution_major_version|int > 7
