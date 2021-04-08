@@ -1,1 +1,2 @@
 ---
+nagios_allow_ping: true

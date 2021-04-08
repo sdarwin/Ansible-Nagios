@@ -16,3 +16,10 @@
     dest: "{{ nsclient_installed_location }}/security/nrpe_dh_2048.pem"
     force: false
   notify: restart nscp
+
+- name: enable ping through firewall
+  win_shell: |
+    Enable-NetFirewallRule -DisplayName "File and Printer Sharing (Echo Request - ICMPv4-In)"
+    Enable-NetFirewallRule -DisplayName "File and Printer Sharing (Echo Request - ICMPv6-In)"
+  when: nagios_allow_ping
+  changed_when: false
