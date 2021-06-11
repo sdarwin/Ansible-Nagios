@@ -81,6 +81,7 @@
     group: root
     mode: 0644
   with_items: "{{ nagios_users | default([]) }}"
+  no_log: true
 
 - name: Set htpasswd for gui users from users variable
   htpasswd:
@@ -94,6 +95,7 @@
     mode: 0644
   when: nagios_admins_group in item.groups
   with_items: "{{ users | default([]) }}"
+  no_log: true
 
 # Let's move this to the end of the playbook, so that configs can be set up first
 # - name: Ensure Nagios is started
