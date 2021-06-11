@@ -128,8 +128,8 @@ nagios_service_name: nagios
 nrpe_checks:
   check_load:
     command: "{{nrpe_plugin_dir}}/check_load"
-    warning_condition: "{{ ansible_processor_count }},{{ ansible_processor_count * 3 / 4 }},{{ ansible_processor_count / 2 }}"
-    critical_condition: "{{ ansible_processor_count * 2 }},{{ ansible_processor_count * 3 / 2 }},{{ ansible_processor_count }}"
+    warning_condition: "{{ ansible_processor_vcpus }},{{ ansible_processor_vcpus * 3 / 4 }},{{ ansible_processor_vcpus / 2 }}"
+    critical_condition: "{{ ansible_processor_vcpus * 2 }},{{ ansible_processor_vcpus * 3 / 2 }},{{ ansible_processor_vcpus }}"
   check_disk:
     command: "{{nrpe_plugin_dir}}/check_disk"
     warning_condition: '20%'
