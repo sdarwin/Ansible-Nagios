@@ -24,6 +24,9 @@ env:
     - MOLECULE_DISTRO: debian9
       MOLECULE_DOCKER_COMMAND: /lib/systemd/systemd
 
+before_install:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
 install:
   # Install test dependencies.
   - sudo apt-get install -y python3-pip python3-setuptools
