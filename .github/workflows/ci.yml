@@ -7,7 +7,7 @@ name: CI
       - master
       - develop
   schedule:
-    - cron: "0 4 * * 3"
+    - cron: "0 4 2 * *"
 
 defaults:
   run:
