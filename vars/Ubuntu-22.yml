@@ -1,0 +1,9 @@
+---
+nagios_with_httpd_conf: /etc/apache2/conf-available
+default_nagios_apache_packages:
+  - apache2
+  - php-gd
+  - libgd-dev
+  - libapache2-mod-php
+  - unzip
+default_check_nrpe_package: nagios-nrpe-plugin

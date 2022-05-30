@@ -13,7 +13,7 @@ nrpe_command_timeout: 60
 
 nrpe_checks:
   check_disk:
-    command: "{{nrpe_plugin_dir}}/check_disk"
+    command: "{{ nrpe_plugin_dir }}/check_disk"
     warning_condition: '20%'
     critical_condition: '10%'
     parameters: "/"

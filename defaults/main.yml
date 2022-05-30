@@ -57,7 +57,7 @@ nrpe_client_plugins_dir: /usr/local/nagios/libexec
 nagios_base_dir: /usr/local/nagios
 
 # nagios object directory
-nagios_object_dir: "{{nagios_base_dir}}/etc/objects"
+nagios_object_dir: "{{ nagios_base_dir }}/etc/objects"
 
 # if true, nagios_object_dir is a cfg_dir and nagios will
 # autoload all files ending in .cfg
@@ -116,31 +116,31 @@ nagios_cgi_action_url_target: '_blank'
 nagios_cgi_notes_url_target: '_blank'
 nagios_cgi_lock_author_names: 1
 nagios_server_name: nagios
-nagios_conf_dir: "{{nagios_base_dir}}/etc"
-nagios_docroot: "{{nagios_base_dir}}/share"
+nagios_conf_dir: "{{ nagios_base_dir }}/etc"
+nagios_docroot: "{{ nagios_base_dir }}/share"
 nagios_server_vname: nagios
-nagios_plugin_dir: "{{nagios_base_dir}}/libexec"
-nagios_cache_dir: "{{nagios_base_dir}}/var"
+nagios_plugin_dir: "{{ nagios_base_dir }}/libexec"
+nagios_cache_dir: "{{ nagios_base_dir }}/var"
 nagios_service_name: nagios
 
 #### nrpe checks ####
 
 nrpe_checks:
   check_load:
-    command: "{{nrpe_plugin_dir}}/check_load"
+    command: "{{ nrpe_plugin_dir }}/check_load"
     warning_condition: "{{ ansible_processor_vcpus }},{{ ansible_processor_vcpus * 3 / 4 }},{{ ansible_processor_vcpus / 2 }}"
     critical_condition: "{{ ansible_processor_vcpus * 2 }},{{ ansible_processor_vcpus * 3 / 2 }},{{ ansible_processor_vcpus }}"
   check_disk:
-    command: "{{nrpe_plugin_dir}}/check_disk"
+    command: "{{ nrpe_plugin_dir }}/check_disk"
     warning_condition: '20%'
     critical_condition: '10%'
-    parameters: "-A -i '.gvfs' -i /run/user -i /run/lxcfs -i /run/docker -i /var/lib/docker -i /var/lib/kubelet -i '/snap/*'"
+    parameters: "-A -i '.gvfs' -i /run/user -i /run/lxcfs -i /run/docker -i /var/lib/docker -i /var/lib/kubelet -i '/snap/*' -i /sys/kernel/debug/tracing"
   check_swap:
-    command: "{{nrpe_plugin_dir}}/check_swap"
+    command: "{{ nrpe_plugin_dir }}/check_swap"
     warning_condition: '30%'
     critical_condition: '20%'
   check_mem:
-    command: "{{nrpe_plugin_dir}}/check_mem"
+    command: "{{ nrpe_plugin_dir }}/check_mem"
     warning_condition: '70'
     critical_condition: '80'
 
