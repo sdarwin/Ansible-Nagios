@@ -1,4 +1,13 @@
 ---
+- name: nagios_mac_install_base
+  set_fact:
+    nagios_mac_install_base: "/usr/local"
+
+- name: nagios_mac_install_base arm64
+  set_fact:
+    nagios_mac_install_base: "/opt/homebrew"
+  when: ansible_architecture == "arm64"
+
 - name: Ensure nrpe_group exists
   ansible.builtin.group:
     name: "{{ nrpe_group }}"
@@ -11,18 +20,23 @@
     groups: "{{ nrpe_group }}"
     append: true
 
-- name: Check if brew exists
-  stat:
-    path: /usr/local/bin/brew
-  register: brew_stat_result
+# - name: Check if brew exists
+#   stat:
+#     path: /usr/local/bin/brew
+#   register: brew_stat_result
+#
+- name: Check is brew installed
+  shell: command -v brew >/dev/null 2>&1
+  register: does_brew_exist
+  ignore_errors: yes
 
 - name: Install brew
   command: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-  when: not brew_stat_result.stat.exists
+  when: not does_brew_exist.rc
 
 - name: nrpe_plugin_dir_default
   set_fact:
-    nrpe_plugin_dir: "/usr/local/opt/nagios-plugins/libexec/sbin"
+    nrpe_plugin_dir: "{{ nagios_mac_install_base }}/opt/nagios-plugins/libexec/sbin"
 
 - name: Install nagios-plugins
   community.general.homebrew:
@@ -57,7 +71,7 @@
 - name: NRPE config file
   template:
     src: nrpe.cfg
-    dest: /usr/local/etc/nrpe.cfg
+    dest: "{{ nagios_mac_install_base }}/etc/nrpe.cfg"
     owner: administrator
     group: admin
     mode: 0644

@@ -6,9 +6,9 @@
   <string>homebrew.mxcl.nrpe</string>
   <key>ProgramArguments</key>
   <array>
-    <string>/usr/local/opt/nrpe/bin/nrpe</string>
+    <string>{{ nagios_mac_install_base }}/opt/nrpe/bin/nrpe</string>
     <string>-c</string>
-    <string>/usr/local/etc/nrpe.cfg</string>
+    <string>{{ nagios_mac_install_base }}/etc/nrpe.cfg</string>
     <string>-d</string>
   </array>
   <key>RunAtLoad</key>
