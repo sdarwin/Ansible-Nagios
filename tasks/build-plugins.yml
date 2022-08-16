@@ -1,7 +1,9 @@
 ---
-
 - name: Get Plugins
-  get_url: url={{ nagios_pluginsurl }} dest={{ nagios_download_dir }}/{{ nagios_pluginssrc }}.tar.gz
+  get_url:
+    url: "{{ nagios_pluginsurl }}"
+    dest: "{{ nagios_download_dir }}/{{ nagios_pluginssrc }}.tar.gz"
+    mode: 0755
 
 - name: Unpack Plugin source files
   shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nagios_pluginssrc }}.tar.gz creates={{ nagios_download_dir }}/{{ nagios_pluginssrc }}

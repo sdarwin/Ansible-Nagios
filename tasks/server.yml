@@ -9,10 +9,10 @@
     mode: 0755
     state: directory
 
-- include: setup-RedHat-family-prerequisites.yml
+- import_tasks: setup-RedHat-family-prerequisites.yml
   when: ansible_os_family == 'RedHat'
 
-- include: setup-Debian-family-prerequisites.yml
+- import_tasks: setup-Debian-family-prerequisites.yml
   when: ansible_os_family == 'Debian'
 
 # nagios prerequisite
@@ -32,9 +32,9 @@
 - name: Add apache user to nagcmd group
   user: name={{ nagios_apache_user }} state=present groups={{ nagios_monitoring_command_group }}
 
-- include: build-nagios.yml
+- import_tasks: build-nagios.yml
 
-- include: build-plugins.yml
+- import_tasks: build-plugins.yml
 
 - name: Activate Nagios site on Ubuntu
   file: src=/etc/apache2/conf-available/nagios.conf dest=/etc/apache2/conf-enabled/nagios.conf state=link owner=root group=root
@@ -93,10 +93,10 @@
   service: name={{ nagios_apache_service }} state=started enabled=yes
 
 - name: Include nrpe_client
-  include: nrpe_client.yml
+  import_tasks: nrpe_client.yml
 
 - name: Include configs task
-  include: configs.yml
+  import_tasks: configs.yml
 
 - name: Ensure Nagios is started
   service: name=nagios state=started enabled=yes

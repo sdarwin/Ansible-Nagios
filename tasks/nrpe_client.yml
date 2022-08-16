@@ -34,10 +34,10 @@
     - name: Include OS-specific variables.
       include_vars: "{{ ansible_os_family }}-family.yml"
 
-    - include: setup-RedHat-family-prerequisites.yml
+    - import_tasks: setup-RedHat-family-prerequisites.yml
       when: ansible_os_family == 'RedHat'
 
-    - include: setup-Debian-family-prerequisites.yml
+    - import_tasks: setup-Debian-family-prerequisites.yml
       when: ansible_os_family == 'Debian'
 
     - name: Get NRPE
@@ -45,6 +45,7 @@
         timeout: 30
         url: "{{ nrpe_url }}"
         dest: "{{ nagios_download_dir }}/{{ nrpe_src }}.tar.gz"
+        mode: 0755
       retries: 3
       delay: 40
       register: result

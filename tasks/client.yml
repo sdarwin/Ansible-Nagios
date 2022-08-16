@@ -1,13 +1,13 @@
 ---
 
 - name: include linux client
-  include: client_linux.yml
+  import_tasks: client_linux.yml
   when: ansible_system == 'Linux'
 
 - name: include mac client
-  include: client_macos.yml
+  import_tasks: client_macos.yml
   when: ansible_system == 'Darwin'
 
 - name: include windows client
-  include: client_windows.yml
+  import_tasks: client_windows.yml
   when: ansible_system == 'Win32NT'

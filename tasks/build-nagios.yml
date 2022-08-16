@@ -1,7 +1,10 @@
 ---
 
 - name: GET Nagios
-  get_url: url={{ nagios_url }} dest={{ nagios_download_dir }}/{{ nagios_src }}.tar.gz
+  get_url:
+    url: "{{ nagios_url }}"
+    dest: "{{ nagios_download_dir }}/{{ nagios_src }}.tar.gz"
+    mode: 0755
 
 - name: Unpack Nagios source files
   shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nagios_src }}.tar.gz creates={{ nagios_download_dir }}/{{ nagios_src }}

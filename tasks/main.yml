@@ -19,10 +19,10 @@
 ##########
 
 - name: Include client
-  include: client.yml
+  import_tasks: client.yml
   when: run_nagios_client is defined
 
 
 - name: Include server
-  include: server.yml
+  import_tasks: server.yml
   when: run_nagios_server is defined

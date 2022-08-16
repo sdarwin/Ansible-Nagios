@@ -4,7 +4,7 @@ galaxy_info:
   author: sdarwin
   description: Install Nagios 4.x on Ubuntu or CentOS
   license: BSD
-  min_ansible_version: 2.4
+  min_ansible_version: "2.4"
   platforms:
     - name: Ubuntu
       versions:
@@ -21,11 +21,11 @@ galaxy_info:
         - stretch
     - name: EL
       versions:
-        - 8
-        - 7
+        - "8"
+        - "7"
     - name: Windows
       versions:
-        - 2019
+        - "2019"
 
   galaxy_tags:
     - monitoring

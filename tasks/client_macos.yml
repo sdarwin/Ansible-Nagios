@@ -28,7 +28,8 @@
 - name: Check is brew installed
   shell: command -v brew >/dev/null 2>&1
   register: does_brew_exist
-  ignore_errors: yes
+  ignore_errors: true
+  changed_when: false
 
 - name: Install brew
   command: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
