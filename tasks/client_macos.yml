@@ -20,24 +20,34 @@
     groups: "{{ nrpe_group }}"
     append: true
 
-# - name: Check if brew exists
-#   stat:
-#     path: /usr/local/bin/brew
-#   register: brew_stat_result
-#
-- name: Check is brew installed
-  shell: command -v brew >/dev/null 2>&1
+# test on arm cpu also
+- name: Check if brew is installed
+  shell: |
+    export PATH=/usr/local/bin:/opt/homebrew/bin:$PATH
+    command -v brew
+  args:
+    executable: /bin/bash
   register: does_brew_exist
   ignore_errors: true
   changed_when: false
 
 - name: Install brew
   command: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-  when: not does_brew_exist.rc
+  when: does_brew_exist.rc
 
 - name: nrpe_plugin_dir_default
   set_fact:
     nrpe_plugin_dir: "{{ nagios_mac_install_base }}/opt/nagios-plugins/libexec/sbin"
+
+# Just ran into this problem. A conflict with prometheus.
+# Might solve it another way in the future.
+- name: fix dir permissions
+  shell: |
+    chmod g+w {{ nagios_mac_install_base }}/var/log
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  changed_when: false
 
 - name: Install nagios-plugins
   community.general.homebrew:
