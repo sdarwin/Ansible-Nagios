@@ -11,3 +11,7 @@
 - name: include windows client
   import_tasks: client_windows.yml
   when: ansible_system == 'Win32NT'
+
+- name: include freebsd client
+  import_tasks: client_freebsd.yml
+  when: ansible_system == 'FreeBSD'

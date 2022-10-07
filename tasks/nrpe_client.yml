@@ -34,10 +34,12 @@
     - name: Include OS-specific variables.
       include_vars: "{{ ansible_os_family }}-family.yml"
 
-    - import_tasks: setup-RedHat-family-prerequisites.yml
+    - name: Import setup-RedHat-family-prerequisites.yml
+      import_tasks: setup-RedHat-family-prerequisites.yml
       when: ansible_os_family == 'RedHat'
 
-    - import_tasks: setup-Debian-family-prerequisites.yml
+    - name: Import setup-Debian-family-prerequisites.yml
+      import_tasks: setup-Debian-family-prerequisites.yml
       when: ansible_os_family == 'Debian'
 
     - name: Get NRPE

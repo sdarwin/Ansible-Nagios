@@ -1,0 +1,30 @@
+---
+nrpe_user: nagios
+nrpe_group: nagios
+nrpe_package_name: nrpe3
+nrpe_service_name: nrpe3
+nrpe_conf_dir: /usr/local/etc
+nrpe_pid_file: /var/nrpe.pid
+nrpe_server_port: 5666
+nrpe_dont_blame_nrpe: 0
+nrpe_debug: 0
+nrpe_command_timeout: 60
+
+nrpe_checks:
+  check_load:
+    command: "{{ nrpe_plugin_dir }}/check_load"
+    warning_condition: "{{ ansible_processor_count | int }},{{ ansible_processor_count | int * 3 / 4 }},{{ ansible_processor_count | int / 2 }}"
+    critical_condition: "{{ ansible_processor_count | int * 2 }},{{ ansible_processor_count | int * 3 / 2 }},{{ ansible_processor_count | int }}"
+  check_disk:
+    command: "{{ nrpe_plugin_dir }}/check_disk"
+    warning_condition: '20%'
+    critical_condition: '10%'
+    parameters: "-p /"
+  check_swap:
+    command: "{{ nrpe_plugin_dir }}/check_swap"
+    warning_condition: '30%'
+    critical_condition: '20%'
+    # check_mem:
+    #   command: "{{ nrpe_plugin_dir }}/check_mem"
+    #   warning_condition: '70'
+    #   critical_condition: '80'

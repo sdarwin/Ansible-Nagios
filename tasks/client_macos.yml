@@ -41,12 +41,12 @@
 
 # Just ran into this problem. A conflict with prometheus.
 # Might solve it another way in the future.
-- name: fix dir permissions
+- name: fix dir permissions  # noqa deprecated-command-syntax
   shell: |
     chmod g+w {{ nagios_mac_install_base }}/var/log
   args:
     executable: /bin/bash
-  ignore_errors: true
+  failed_when: false
   changed_when: false
 
 - name: Install nagios-plugins
