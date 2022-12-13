@@ -19,12 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the codebase.
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: 'sdarwin.nagios'
 
       - name: Set up Python 3.
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: '3.x'
 
@@ -63,17 +63,22 @@ jobs:
 
     steps:
       - name: Check out the codebase.
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: 'sdarwin.nagios'
 
       - name: Set up Python 3.
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: '3.x'
 
       - name: Install test dependencies.
-        run: pip3 install ansible molecule[docker] docker
+        # run: pip3 install ansible molecule[docker] docker
+        run: |
+          pip3 install ansible==6.4.0
+          pip3 install molecule[docker]==4.0.1
+          pip3 install docker==6.0.0
+
 
       - name: Run Molecule tests.
         run: molecule test
