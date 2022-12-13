@@ -26,9 +26,9 @@ galaxy_info:
     - name: Windows
       versions:
         - "2019"
-    - name: FreeBSD
-      versions:
-        - "13.1"
+  # - name: FreeBSD
+  #   versions:
+  #     - "13.1"
 
   galaxy_tags:
     - monitoring

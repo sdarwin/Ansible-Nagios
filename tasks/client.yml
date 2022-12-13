@@ -1,17 +1,17 @@
 ---
 
-- name: include linux client
-  import_tasks: client_linux.yml
+- name: Include linux client
+  ansible.builtin.import_tasks: client_linux.yml
   when: ansible_system == 'Linux'
 
-- name: include mac client
-  import_tasks: client_macos.yml
+- name: Include mac client
+  ansible.builtin.import_tasks: client_macos.yml
   when: ansible_system == 'Darwin'
 
-- name: include windows client
-  import_tasks: client_windows.yml
+- name: Include windows client
+  ansible.builtin.import_tasks: client_windows.yml
   when: ansible_system == 'Win32NT'
 
-- name: include freebsd client
-  import_tasks: client_freebsd.yml
+- name: Include freebsd client
+  ansible.builtin.import_tasks: client_freebsd.yml
   when: ansible_system == 'FreeBSD'

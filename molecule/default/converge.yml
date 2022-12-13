@@ -5,20 +5,22 @@
 
   pre_tasks:
     - name: Run whoami without become.
-      command: whoami
+      ansible.builtin.command: whoami
       changed_when: false
       become: false
       register: whoami
-    - name: print whoami
-      debug:
+    - name: Print whoami
+      ansible.builtin.debug:
         var: whoami
         verbosity: 4
     - name: Update apt cache.
-      apt: update_cache=yes cache_valid_time=600
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 600
       when: ansible_os_family == 'Debian'
 
-    - name: Wait for systemd to complete initialization.  # noqa 303
-      command: systemctl is-system-running
+    - name: Wait for systemd to complete initialization.  # noqa command-instead-of-module
+      ansible.builtin.command: systemctl is-system-running
       register: systemctl_status
       until: >
         'running' in systemctl_status.stdout or
@@ -28,39 +30,39 @@
       when: ansible_service_mgr == 'systemd'
       changed_when: false
       failed_when: systemctl_status.rc > 1
-    - name: fix coreutils-single on containers
-      command: dnf install -y --allowerasing coreutils
+    - name: Fix coreutils-single on containers
+      ansible.builtin.command: dnf install -y --allowerasing coreutils
       when:
         - ansible_os_family == 'RedHat'
         - ansible_distribution_major_version| int > 7
       changed_when: false
-    - name: install iproute2
-      package:
+    - name: Install iproute2
+      ansible.builtin.package:
         name: iproute2
         state: present
       when:
         - ansible_os_family == 'Debian'
       changed_when: false
-    - name: install iproute
-      package:
+    - name: Install iproute
+      ansible.builtin.package:
         name: iproute
         state: present
       when:
         - ansible_os_family == 'RedHat'
       changed_when: false
     # debugging.
-    - name: create cron.d
-      file:
+    - name: Create cron.d
+      ansible.builtin.file:
         path: /etc/cron.d
         state: directory
         mode: '0755'
       when:
         - ansible_os_family == 'RedHat'
         - ansible_distribution_major_version| int > 7
-    - name: re-run setup
-      setup:
+    - name: Rerun setup
+      ansible.builtin.setup:
     - name: Display all variables/facts known for a host
-      debug:
+      ansible.builtin.debug:
         var: hostvars
   roles:
     - {role: 'sdarwin.nagios', run_nagios_client: true}
@@ -68,11 +70,11 @@
 
   post_tasks:
     - name: Add nagios.example.com to hosts file
-      shell: echo "127.0.1.1  nagios.example.com" >> /etc/hosts  # noqa 305
+      ansible.builtin.shell: echo "127.0.1.1  nagios.example.com" >> /etc/hosts  # noqa command-instead-of-shell
       changed_when: false
 
     - name: Check website
-      uri:
+      ansible.builtin.uri:
         url: http://nagios.example.com/nagios
         url_username: nagiosadmin
         url_password: Password1change

@@ -1,14 +1,14 @@
 ---
-- name: import epel gpg key
-  rpm_key:
+- name: Import epel gpg key
+  ansible.builtin.rpm_key:
     key: "{{ epel_repo_gpg_key_path }}"
     state: present
   tags:
     - epel
   when: ansible_os_family == 'RedHat'
 
-- name: install epel repo
-  yum:
+- name: Install epel repo
+  ansible.builtin.yum:
     name: "{{ epel_repo_url }}"
     state: present
   tags:
@@ -17,7 +17,7 @@
 
 # To enable powertools, see next step
 - name: Install dnf-plugins-core
-  yum:
+  ansible.builtin.yum:
     name: dnf-plugins-core
     state: present
   when:
@@ -26,39 +26,39 @@
 
 # For certain Perl modules to be available
 - name: Install powertools
-  command: dnf config-manager --set-enabled powertools
+  ansible.builtin.command: dnf config-manager --set-enabled powertools
   when:
     - ansible_os_family == 'RedHat'
     - ansible_distribution_major_version|int > 7
   changed_when: false
 
-- name: install apache
-  yum:
+- name: Install apache
+  ansible.builtin.yum:
     name: "{{ nagios_apache_packages }}"
     state: present
 
 - name: Install Nagios prerequisites for CentOS
-  yum:
+  ansible.builtin.yum:
     name: "{{ nagios_prerequisite_packages }}"
     state: present
 
 - name: Install plugin prerequisites for CentOS
-  yum:
+  ansible.builtin.yum:
     name: "{{ nagios_plugin_packages }}"
     state: present
 
 - name: Install NRPE prerequisites
-  yum:
+  ansible.builtin.yum:
     name: "{{ nagios_nrpe_prerequisite_packages }}"
     state: present
 
 - name: Install nagios python packages
-  yum:
+  ansible.builtin.yum:
     name: "{{ nagios_python_packages }}"
     state: present
 
-- name: install passlib
-  pip:
+- name: Install passlib
+  ansible.builtin.pip:
     name:
       - passlib
   changed_when: false

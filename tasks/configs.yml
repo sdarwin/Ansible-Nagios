@@ -1,13 +1,13 @@
 ---
 - name: Install config files
   become: true
-  notify: restart nagios
-  template: >
-    src={{ item.src }}
-    dest={{ nagios_object_dir }}/{{ item.dest }}
-    owner={{ nagios_user }}
-    group={{ nagios_group }}
-    mode=640
+  notify: Restart nagios
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ nagios_object_dir }}/{{ item.dest }}"
+    owner: "{{ nagios_user }}"
+    group: "{{ nagios_group }}"
+    mode: '0640'
   with_items:
     - {src: hosts.cfg, dest: hosts.cfg}
     - {src: hostgroups.cfg, dest: hostgroups.cfg}
@@ -17,36 +17,38 @@
 
 - name: Install contacts.cfg
   become: true
-  notify: restart nagios
-  template: >
-    src={{ item.src }}
-    dest={{ nagios_object_dir }}/{{ item.dest }}
-    owner={{ nagios_user }}
-    group={{ nagios_group }}
-    mode=640
+  notify: Restart nagios
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ nagios_object_dir }}/{{ item.dest }}"
+    owner: "{{ nagios_user }}"
+    group: "{{ nagios_group }}"
+    mode: '0640'
   with_items:
     - {src: contacts.cfg, dest: contacts.cfg}
   when: users is defined
 
 - name: Install more config files
   become: true
-  notify: restart nagios
-  template: >
-    src={{ item.src }}
-    dest={{ nagios_base_dir }}/etc/{{ item.dest }}
-    owner={{ nagios_user }}
-    group={{ nagios_group }}
-    mode=775
+  notify: Restart nagios
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ nagios_base_dir }}/etc/{{ item.dest }}"
+    owner: "{{ nagios_user }}"
+    group: "{{ nagios_group }}"
+    mode: '0775'
   with_items:
     - {src: cgi.cfg, dest: cgi.cfg}
 
+# 2022-12-13 note: why was the = equal sign escaped? And perhaps since the initial commit. As follows:
+# regexp: "^cfg_file\={{ nagios_object_dir }}/{{ item }}\.cfg"
 - name: Update nagios.cfg with config files
   become: true
-  notify: restart nagios
-  lineinfile: >
-    dest={{ nagios_base_dir }}/etc/nagios.cfg
-    line="cfg_file={{ nagios_object_dir }}/{{ item }}.cfg"
-    regexp="^cfg_file\={{ nagios_object_dir }}/{{ item }}\.cfg"
+  notify: Restart nagios
+  ansible.builtin.lineinfile:
+    dest: "{{ nagios_base_dir }}/etc/nagios.cfg"
+    line: "cfg_file={{ nagios_object_dir }}/{{ item }}.cfg"
+    regexp: "^cfg_file={{ nagios_object_dir }}/{{ item }}.cfg"
   with_items:
     - hosts
     - hostgroups
@@ -57,18 +59,18 @@
 
 - name: Update nagios.cfg with config dir
   become: true
-  notify: restart nagios
-  lineinfile: >
-    dest={{ nagios_base_dir }}/etc/nagios.cfg
-    line="cfg_dir={{ nagios_object_dir }}"
-    regexp="^cfg_dir={{ nagios_object_dir }}"
+  notify: Restart nagios
+  ansible.builtin.lineinfile:
+    dest: "{{ nagios_base_dir }}/etc/nagios.cfg"
+    line: "cfg_dir={{ nagios_object_dir }}"
+    regexp: "^cfg_dir={{ nagios_object_dir }}"
   when: nagios_cfg_dir_enabled
 
 # if there is a conflict: two localhost definitions
 - name: Update nagios.cfg, comment out localhost
   become: true
-  notify: restart nagios
-  lineinfile:
+  notify: Restart nagios
+  ansible.builtin.lineinfile:
     path: "{{ nagios_base_dir }}/etc/nagios.cfg"
     line: "#cfg_file={{ nagios_object_dir }}/{{ item }}.cfg"
     # regexp: "^cfg_file\={{ nagios_object_dir }}/{{item}}\.cfg"

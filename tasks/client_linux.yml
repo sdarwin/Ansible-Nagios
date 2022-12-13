@@ -1,29 +1,29 @@
 ---
 - name: Update repositories cache
-  apt:
+  ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 3600
   when: ansible_os_family == "Debian"
 
-- name: nrpe_plugin_dir_default
-  set_fact:
+- name: Set fact nrpe_plugin_dir_default
+  ansible.builtin.set_fact:
     nrpe_plugin_dir: /usr/lib/nagios/plugins
 
-- name: nrpe_plugin_dir_1
-  set_fact:
+- name: Set fact nrpe_plugin_dir_1
+  ansible.builtin.set_fact:
     nrpe_plugin_dir: /usr/lib64/nagios/plugins
   when: ansible_os_family == "RedHat" and ansible_architecture != "i686"
 
-- name: import epel gpg key
-  rpm_key:
+- name: Import epel gpg key
+  ansible.builtin.rpm_key:
     key: "{{ epel_repo_gpg_key_path }}"
     state: present
   tags:
     - epel
   when: ansible_os_family == 'RedHat'
 
-- name: install epel repo
-  yum:
+- name: Install epel repo
+  ansible.builtin.yum:
     name: "{{ epel_repo_url }}"
     state: present
   tags:
@@ -32,7 +32,7 @@
 
 # To enable powertools, see next step
 - name: Install dnf-plugins-core
-  yum:
+  ansible.builtin.yum:
     name: dnf-plugins-core
     state: present
   when:
@@ -41,7 +41,7 @@
 
 # For certain Perl modules to be available
 - name: Install powertools
-  command: dnf config-manager --set-enabled powertools
+  ansible.builtin.command: dnf config-manager --set-enabled powertools
   when:
     - ansible_os_family == 'RedHat'
     - not ansible_distribution == 'RedHat'
@@ -50,7 +50,7 @@
 
 # The equivalent of powertools on RHEL. Unclear if still required.
 - name: Install powertools
-  command: subscription-manager repos --enable "codeready-builder-for-rhel-{{ ansible_distribution_major_version }}-{{ ansible_architecture }}-rpms"
+  ansible.builtin.command: subscription-manager repos --enable "codeready-builder-for-rhel-{{ ansible_distribution_major_version }}-{{ ansible_architecture }}-rpms"
   when:
     - ansible_os_family == 'RedHat'
     - ansible_distribution == 'RedHat'
@@ -59,39 +59,42 @@
   failed_when: false
 
 - name: Install NRPE
-  package: >
-    name={{ nrpe_package_name }}
-    state=present
+  ansible.builtin.package:
+    name: "{{ nrpe_package_name }}"
+    state: present
 
 - name: Install Plugins
-  package: >
-    name={{ item }}
-    state=present
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
   when: ansible_os_family == 'RedHat'
   with_items:
     - nagios-plugins-all
 
 - name: Enable NRPE service
-  service: >
-    name={{ nrpe_service_name }}
-    state=started
-    enabled=yes
+  ansible.builtin.service:
+    name: "{{ nrpe_service_name }}"
+    state: started
+    enabled: true
 
 - name: Install check_mem plugin
-  copy: src=files/check_mem dest={{ nrpe_plugin_dir }}/check_mem mode=755
+  ansible.builtin.copy:
+    src: files/check_mem
+    dest: "{{ nrpe_plugin_dir }}/check_mem"
+    mode: '0755'
 
 - name: NRPE config file
-  template:
+  ansible.builtin.template:
     src: nrpe.cfg
     dest: /etc/nagios/nrpe.cfg
     owner: root
     group: root
     mode: 0644
-  notify: restart nrpe
+  notify: Restart nrpe
 
 # for redhat
-- name: nrpe.d dir
-  file:
+- name: Create nrpe.d dir
+  ansible.builtin.file:
     path: "{{ nrpe_conf_dir }}/nrpe.d"
     state: directory
     owner: root
@@ -99,11 +102,11 @@
     mode: 0755
 
 - name: NRPE checks
-  template:
+  ansible.builtin.template:
     src: nrpe_check.cfg
     dest: "{{ nrpe_conf_dir }}/nrpe.d/{{ item.key }}.cfg"
     owner: root
     group: root
     mode: 0644
   with_dict: "{{ nrpe_checks }}"
-  notify: restart nrpe
+  notify: Restart nrpe
