@@ -49,6 +49,7 @@
     dest: "{{ nagios_base_dir }}/etc/nagios.cfg"
     line: "cfg_file={{ nagios_object_dir }}/{{ item }}.cfg"
     regexp: "^cfg_file={{ nagios_object_dir }}/{{ item }}.cfg"
+    backup: true 
   with_items:
     - hosts
     - hostgroups
