@@ -3,28 +3,30 @@
 #
 
 - name: Install check_nrpe from a package
+  when:
+    - check_nrpe_package is defined
   block:
-    - name: install check_nrpe package
-      package:
+    - name: Install check_nrpe package
+      ansible.builtin.package:
         name: "{{ check_nrpe_package }}"
         state: present
         update_cache: true
 
     - name: Copy check_nrpe
-      copy:
+      ansible.builtin.copy:
         src: "{{ nrpe_plugin_dir }}/check_nrpe"
         dest: "{{ nrpe_client_plugins_dir }}/check_nrpe"
         mode: '0755'
         owner: "{{ nagios_user }}"
         group: "{{ nagios_group }}"
         remote_src: true
-  when:
-    - check_nrpe_package is defined
 
 - name: Install check_nrpe from source
+  when:
+    - check_nrpe_package is not defined
   block:
     - name: Ensure download directory is present
-      file:
+      ansible.builtin.file:
         path: "{{ nagios_download_dir }}"
         owner: root
         group: root
@@ -32,18 +34,18 @@
         state: directory
 
     - name: Include OS-specific variables.
-      include_vars: "{{ ansible_os_family }}-family.yml"
+      ansible.builtin.include_vars: "{{ ansible_os_family }}-family.yml"
 
     - name: Import setup-RedHat-family-prerequisites.yml
-      import_tasks: setup-RedHat-family-prerequisites.yml
+      ansible.builtin.import_tasks: setup-RedHat-family-prerequisites.yml
       when: ansible_os_family == 'RedHat'
 
     - name: Import setup-Debian-family-prerequisites.yml
-      import_tasks: setup-Debian-family-prerequisites.yml
+      ansible.builtin.import_tasks: setup-Debian-family-prerequisites.yml
       when: ansible_os_family == 'Debian'
 
     - name: Get NRPE
-      get_url:
+      ansible.builtin.get_url:
         timeout: 30
         url: "{{ nrpe_url }}"
         dest: "{{ nagios_download_dir }}/{{ nrpe_src }}.tar.gz"
@@ -54,19 +56,19 @@
       until: result is not failed
 
     - name: Unpack NRPE source files
-      shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nrpe_src }}.tar.gz creates={{ nagios_download_dir }}/{{ nrpe_src }}
+      ansible.builtin.shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nrpe_src }}.tar.gz creates={{ nagios_download_dir }}/{{ nrpe_src }}
 
     - name: Configure NRPE
-      shell: ./configure --with-ssl=/usr/bin/openssl --with-ssl-lib=/usr/lib/x86_64-linux-gnu  # noqa 305
+      ansible.builtin.shell: ./configure --with-ssl=/usr/bin/openssl --with-ssl-lib=/usr/lib/x86_64-linux-gnu  # noqa command-instead-of-shell
       args:
         chdir: "{{ nagios_download_dir }}/{{ nrpe_src }}"
         creates: "{{ nagios_download_dir }}/{{ nrpe_src }}/Makefile"
 
     - name: Make NRPE
-      shell: cd {{ nagios_download_dir }}/{{ nrpe_src }} && make all creates={{ nagios_download_dir }}/{{ nrpe_src }}/src/check_nrpe
+      ansible.builtin.shell: cd {{ nagios_download_dir }}/{{ nrpe_src }} && make all creates={{ nagios_download_dir }}/{{ nrpe_src }}/src/check_nrpe
 
     - name: Ensure plugins directory is present
-      file:
+      ansible.builtin.file:
         path: "{{ nrpe_client_plugins_dir }}"
         state: directory
         owner: root
@@ -74,12 +76,10 @@
         mode: 0755
 
     - name: Copy check_nrpe
-      copy:
+      ansible.builtin.copy:
         src: "{{ nagios_download_dir }}/{{ nrpe_src }}/src/check_nrpe"
         dest: "{{ nrpe_client_plugins_dir }}/check_nrpe"
         mode: '0755'
         owner: "{{ nagios_user }}"
         group: "{{ nagios_group }}"
         remote_src: true
-  when:
-    - check_nrpe_package is not defined

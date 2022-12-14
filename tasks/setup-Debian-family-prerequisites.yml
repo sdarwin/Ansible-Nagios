@@ -1,37 +1,37 @@
 ---
 - name: Update repositories cache
-  apt:
+  ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 3600
 
 - name: Install apache packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ nagios_apache_packages }}"
     state: present
 
 - name: Install nagios prerequisite packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ nagios_prerequisite_packages }}"
     state: present
 
 # not supported on 16.04
 - name: Install Plugin prerequisites for Ubuntu
-  apt:
+  ansible.builtin.apt:
     name: ['libradiusclient-ng-dev']
   when: ansible_distribution == 'Ubuntu' and ( ansible_distribution_version == '12.04' or ansible_distribution_version == '14.04' )
 
 - name: Install NRPE prerequisites
-  apt:
+  ansible.builtin.apt:
     name: "{{ nagios_nrpe_prerequisite_packages }}"
     state: present
 
 - name: Install nagios python packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ nagios_python_packages }}"
     state: present
 
-- name: install passlib
-  pip:
+- name: Install passlib
+  ansible.builtin.pip:
     name:
       - passlib
   changed_when: false

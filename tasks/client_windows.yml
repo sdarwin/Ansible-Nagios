@@ -1,24 +1,24 @@
 ---
 - name: Install nscp
-  win_chocolatey:
+  chocolatey.chocolatey.win_chocolatey:
     name: nscp
     state: present
 
-- name: nsclient config file
-  win_template:
+- name: The nsclient config file
+  ansible.windows.win_template:
     src: nsclient.ini
     dest: "{{ nsclient_installed_location }}/nsclient.ini"
-  notify: restart nscp
+  notify: Restart nscp
 
-- name: nrpe_dh_2048.pem file
-  win_template:
+- name: The nrpe_dh_2048.pem file
+  ansible.windows.win_template:
     src: nrpe_dh_2048.pem
     dest: "{{ nsclient_installed_location }}/security/nrpe_dh_2048.pem"
     force: false
-  notify: restart nscp
+  notify: Restart nscp
 
-- name: enable ping through firewall
-  win_shell: |
+- name: Enable ping through firewall
+  ansible.windows.win_shell: |
     Enable-NetFirewallRule -DisplayName "File and Printer Sharing (Echo Request - ICMPv4-In)"
     Enable-NetFirewallRule -DisplayName "File and Printer Sharing (Echo Request - ICMPv6-In)"
   when: nagios_allow_ping

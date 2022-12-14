@@ -1,25 +1,32 @@
 ---
-- name: pauser
-  pause: seconds=2
+- name: Pauser
+  ansible.builtin.pause:
+    seconds: 2
 
-- name: restart apache
-  service: name={{ nagios_apache_service }} state=restarted
+- name: Restart apache
+  ansible.builtin.service:
+    name: "{{ nagios_apache_service }}"
+    state: restarted
 
-- name: restart nagios
+- name: Restart nagios
   become: true
-  service: name=nagios state=restarted
+  ansible.builtin.service:
+    name: nagios
+    state: restarted
 
-- name: restart nrpe
+- name: Restart nrpe
   become: true
-  service: name={{ nrpe_service_name }} state=restarted
+  ansible.builtin.service:
+    name: "{{ nrpe_service_name }}"
+    state: restarted
 
-- name: restart nrpe osx
-  shell: |
+- name: Restart nrpe osx
+  ansible.builtin.shell: |
     /bin/launchctl unload /Library/LaunchDaemons/homebrew.mxcl.nrpe.plist
     /usr/bin/pkill -f /usr/local/opt/nrpe/bin/nrpe
     /bin/launchctl load /Library/LaunchDaemons/homebrew.mxcl.nrpe.plist
 
-- name: restart nscp
-  win_service:
+- name: Restart nscp
+  ansible.windows.win_service:
     name: nscp
     state: restarted

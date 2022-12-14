@@ -1,22 +1,22 @@
 ---
-- name: nrpe_plugin_dir_default
-  set_fact:
+- name: Set fact nrpe_plugin_dir_default
+  ansible.builtin.set_fact:
     # nrpe_plugin_dir: /usr/lib/nagios/plugins
     nrpe_plugin_dir: /usr/local/libexec/nagios
 
 - name: Install NRPE
-  package: >
-    name={{ nrpe_package_name }}
-    state=present
+  ansible.builtin.package:
+    name: "{{ nrpe_package_name }}"
+    state: present
 
 - name: NRPE config file
-  template:
+  ansible.builtin.template:
     src: nrpe.cfg
     dest: /usr/local/etc/nrpe.cfg
     owner: root
     group: wheel
     mode: 0644
-  notify: restart nrpe
+  notify: Restart nrpe
 
 - name: Enable nrpe3 in /etc/rc.conf
   ansible.builtin.lineinfile:
@@ -28,8 +28,8 @@
 # - name: Install check_mem plugin
 #  copy: src=files/check_mem dest={{ nrpe_plugin_dir }}/check_mem mode=755
 
-- name: nrpe.d dir
-  file:
+- name: Create nrpe.d dir
+  ansible.builtin.file:
     path: "{{ nrpe_conf_dir }}/nrpe.d"
     state: directory
     owner: root
@@ -37,17 +37,17 @@
     mode: 0755
 
 - name: NRPE checks
-  template:
+  ansible.builtin.template:
     src: nrpe_check.cfg
     dest: "{{ nrpe_conf_dir }}/nrpe.d/{{ item.key }}.cfg"
     owner: root
     group: wheel
     mode: 0644
   with_dict: "{{ nrpe_checks }}"
-  notify: restart nrpe
+  notify: Restart nrpe
 
 - name: Ensure nrpe3 is running.
-  command: |
+  ansible.builtin.command: |
     /usr/local/etc/rc.d/nrpe3 start
   changed_when: false
   failed_when: false

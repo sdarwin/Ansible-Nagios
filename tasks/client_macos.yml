@@ -1,10 +1,10 @@
 ---
-- name: nagios_mac_install_base
-  set_fact:
+- name: Set fact nagios_mac_install_base
+  ansible.builtin.set_fact:
     nagios_mac_install_base: "/usr/local"
 
-- name: nagios_mac_install_base arm64
-  set_fact:
+- name: Set fact nagios_mac_install_base arm64
+  ansible.builtin.set_fact:
     nagios_mac_install_base: "/opt/homebrew"
   when: ansible_architecture == "arm64"
 
@@ -22,7 +22,7 @@
 
 # test on arm cpu also
 - name: Check if brew is installed
-  shell: |
+  ansible.builtin.shell: |
     export PATH=/usr/local/bin:/opt/homebrew/bin:$PATH
     command -v brew
   args:
@@ -32,17 +32,17 @@
   changed_when: false
 
 - name: Install brew
-  command: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  ansible.builtin.command: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   when: does_brew_exist.rc
 
-- name: nrpe_plugin_dir_default
-  set_fact:
+- name: Set fact nrpe_plugin_dir_default
+  ansible.builtin.set_fact:
     nrpe_plugin_dir: "{{ nagios_mac_install_base }}/opt/nagios-plugins/libexec/sbin"
 
 # Just ran into this problem. A conflict with prometheus.
 # Might solve it another way in the future.
-- name: fix dir permissions  # noqa deprecated-command-syntax
-  shell: |
+- name: Fix dir permissions  # noqa deprecated-command-syntax
+  ansible.builtin.shell: |
     chmod g+w {{ nagios_mac_install_base }}/var/log
   args:
     executable: /bin/bash
@@ -62,15 +62,15 @@
   become: false
 
 - name: LaunchDaemon config
-  template:
+  ansible.builtin.template:
     src: homebrew.mxcl.nrpe.plist
     dest: /Library/LaunchDaemons/homebrew.mxcl.nrpe.plist
     owner: root
     group: wheel
     mode: 0755
-  notify: restart nrpe osx
+  notify: Restart nrpe osx
 
-- name: remove default LaunchDaemon config
+- name: Remove default LaunchDaemon config
   ansible.builtin.file:
     path: /Users/administrator/Library/LaunchAgents/homebrew.mxcl.nrpe.plist
     state: absent
@@ -80,16 +80,16 @@
 #  copy: src=files/check_mem dest={{ nrpe_plugin_dir }}/check_mem mode=755
 
 - name: NRPE config file
-  template:
+  ansible.builtin.template:
     src: nrpe.cfg
     dest: "{{ nagios_mac_install_base }}/etc/nrpe.cfg"
     owner: administrator
     group: admin
     mode: 0644
-  notify: restart nrpe osx
+  notify: Restart nrpe osx
 
-- name: nrpe.d dir
-  file:
+- name: Create nrpe.d dir
+  ansible.builtin.file:
     path: "{{ nrpe_conf_dir }}/nrpe.d"
     state: directory
     owner: administrator
@@ -97,16 +97,16 @@
     mode: 0755
 
 - name: NRPE checks
-  template:
+  ansible.builtin.template:
     src: nrpe_check.cfg
     dest: "{{ nrpe_conf_dir }}/nrpe.d/{{ item.key }}.cfg"
     owner: administrator
     group: admin
     mode: 0644
   with_dict: "{{ nrpe_checks }}"
-  notify: restart nrpe osx
+  notify: Restart nrpe osx
 
 - name: Ensure nrpe is started
-  command: |
+  ansible.builtin.command: |
     launchctl load /Library/LaunchDaemons/homebrew.mxcl.nrpe.plist
   changed_when: false
