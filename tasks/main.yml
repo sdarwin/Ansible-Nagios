@@ -13,15 +13,13 @@
   when:
     - item is match("^default_")
     - vars[item[8:]] is not defined
-  with_items:
-    "{{ vars | list }}"
+  with_items: "{{ vars | list }}"
 
 ##########
 
 - name: Include client
   ansible.builtin.import_tasks: client.yml
   when: run_nagios_client is defined
-
 
 - name: Include server
   ansible.builtin.import_tasks: server.yml

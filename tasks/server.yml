@@ -6,7 +6,7 @@
     path: "{{ nagios_download_dir }}"
     owner: root
     group: root
-    mode: 0755
+    mode: "0755"
     state: directory
 
 - name: Import setup-RedHat-family-prerequisites.yml
@@ -99,7 +99,7 @@
 
 - name: Store selinux mode in current_selinux_mode variable
   ansible.builtin.set_fact:
-    current_selinux_mode: '{{ ansible_selinux.mode }}'
+    current_selinux_mode: "{{ ansible_selinux.mode }}"
   when: check_selinux
 
 - name: Check if SELinux is running in enforcing mode and change access
@@ -110,7 +110,7 @@
     recurse: true
     owner: root
     group: root
-    mode: 0755
+    mode: "0755"
   when: current_selinux_mode == 'enforcing'
 
 - name: Http service state

@@ -3,7 +3,7 @@
   ansible.builtin.get_url:
     url: "{{ nagios_pluginsurl }}"
     dest: "{{ nagios_download_dir }}/{{ nagios_pluginssrc }}.tar.gz"
-    mode: 0755
+    mode: "0755"
 
 - name: Unpack Plugin source files
   ansible.builtin.shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nagios_pluginssrc }}.tar.gz creates={{ nagios_download_dir }}/{{ nagios_pluginssrc }}

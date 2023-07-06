@@ -81,7 +81,7 @@
   ansible.builtin.copy:
     src: files/check_mem
     dest: "{{ nrpe_plugin_dir }}/check_mem"
-    mode: '0755'
+    mode: "0755"
 
 - name: NRPE config file
   ansible.builtin.template:
@@ -89,7 +89,7 @@
     dest: /etc/nagios/nrpe.cfg
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   notify: Restart nrpe
 
 # for redhat
@@ -99,7 +99,7 @@
     state: directory
     owner: root
     group: root
-    mode: 0755
+    mode: "0755"
 
 - name: NRPE checks
   ansible.builtin.template:
@@ -107,6 +107,6 @@
     dest: "{{ nrpe_conf_dir }}/nrpe.d/{{ item.key }}.cfg"
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   with_dict: "{{ nrpe_checks }}"
   notify: Restart nrpe

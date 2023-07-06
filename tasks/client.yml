@@ -1,5 +1,4 @@
 ---
-
 - name: Include linux client
   ansible.builtin.import_tasks: client_linux.yml
   when: ansible_system == 'Linux'

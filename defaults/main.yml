@@ -5,7 +5,7 @@ nrpe_plugin_dir: /usr/lib/nagios/plugins
 # Directory that will be used as the location for the downloads§
 nagios_download_dir: "{{ ansible_env.HOME }}/nagios"
 
-nagios_admins_group: 'sysadmin'
+nagios_admins_group: sysadmin
 # nagios_users_group: 'users'
 
 nagios_version: 4.4.9
@@ -13,19 +13,19 @@ nagios_plugins_version: 2.4.4
 nrpe_version: 4.0.3
 
 # Define the download url for the Nagios Core source files and the version you want to use.
-nagios_url: "https://assets.nagios.com/downloads/nagioscore/releases/nagios-{{ nagios_version }}.tar.gz"
+nagios_url: https://assets.nagios.com/downloads/nagioscore/releases/nagios-{{ nagios_version }}.tar.gz
 
 # This is the directory where the Nagios source files will be placed, this should be
 # the directory which is created when the download file is unpacked when runnint
 # tar -xzvf nagios-4.1.1.tar.gz
-nagios_src: "nagios-{{ nagios_version }}"
+nagios_src: nagios-{{ nagios_version }}
 
 # Define the download url for the Plugins and the version you want to use.
-nagios_pluginsurl: "http://www.nagios-plugins.org/download/nagios-plugins-{{ nagios_plugins_version }}.tar.gz"
+nagios_pluginsurl: http://www.nagios-plugins.org/download/nagios-plugins-{{ nagios_plugins_version }}.tar.gz
 # This is the directory where the Plugin source files will be placed, this should be
 # the directory which is created when the download file is unpacked when runnint
 # tar -xzvf nagios-plugins-2.1.1.tar.gz
-nagios_pluginssrc: "nagios-plugins-{{ nagios_plugins_version }}"
+nagios_pluginssrc: nagios-plugins-{{ nagios_plugins_version }}
 
 nagios_monitoring_user: nagios
 nagios_monitoring_command_group: nagcmd
@@ -45,8 +45,8 @@ nagios_users:
 # require the distributions Nagios package to be installed.
 # nrpe_url: "http://sourceforge.net/projects/nagios/files/nrpe-{{ nrpe_version | regex_replace('(\\d+)\\..*', '\\1') }}.x/nrpe-{{ nrpe_version }}/nrpe-{{ nrpe_version }}.tar.gz"
 # nrpe_url: "https://downloads.sourceforge.net/project/nagios/nrpe-{{ nrpe_version | regex_replace('(\\d+)\\..*', '\\1') }}.x/nrpe-{{ nrpe_version }}.tar.gz"
-nrpe_url: "https://downloads.sourceforge.net/project/nagios/nrpe-{{ nrpe_version | regex_replace('(\\d+)\\..*', '\\1') }}.x//nrpe-{{ nrpe_version }}/nrpe-{{ nrpe_version }}.tar.gz"
-nrpe_src: "nrpe-{{ nrpe_version }}"
+nrpe_url: https://downloads.sourceforge.net/project/nagios/nrpe-{{ nrpe_version | regex_replace('(\d+)\..*', '\1') }}.x//nrpe-{{ nrpe_version }}/nrpe-{{ nrpe_version }}.tar.gz
+nrpe_src: nrpe-{{ nrpe_version }}
 
 # Location of monitoring plugins
 nrpe_client_plugins_dir: /usr/local/nagios/libexec
@@ -71,13 +71,13 @@ nagios_group: nagios
 
 # define service checks per hostgroup here. Groups themselves are created by the ansible inventory.
 nagios_host_groups:
-  - name: 'all'
+  - name: all
     checks:
-      - {command: 'check_ssh', description: 'SSH Service Check'}
-      - {command: 'check_disk', description: 'Check Disk Space'}
+      - {command: check_ssh, description: SSH Service Check}
+      - {command: check_disk, description: Check Disk Space}
       # - {command: 'check_swap', description: 'Check Swap Space'}
-      - {command: 'check_load', description: 'Check Load'}
-      - {command: 'check_mem', description: 'Check Memory'}
+      - {command: check_load, description: Check Load}
+      - {command: check_mem, description: Check Memory}
 # - name: 'webservers'
 #   checks:
 #    - {command: 'check_http', description: 'Check HTTP'}
@@ -92,28 +92,28 @@ nagios_hosts: ""
 nagios_commands:
   # check_ssh is already in the default installation
   # - {name: 'check_ssh', command: '$USER1$/check_ssh $ARG1$ $HOSTADDRESS$'}
-  - {name: 'check_disk', command: '$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_disk'}
-  - {name: 'check_load', command: '$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_load'}
-  - {name: 'check_swap', command: '$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_swap'}
-  - {name: 'check_mem', command: '$USER1$/check_nrpe -H $HOSTADDRESS$ -c check_mem'}
-  - {name: 'check_https', command: '$USER1$/check_http -f follow -S --verify-host -C 21,14 --continue-after-certificate --sni -I $ARG1$ -H $ARG2$ -s $ARG3$ -u $ARG4$'}
-  - {name: 'check_https_certonly', command: '$USER1$/check_http -f follow -S --verify-host -C 21,14 --sni -I $ARG1$ -H $ARG2$ -s $ARG3$ -u $ARG4$ -p $ARG5$'}
-  - {name: 'check_http_full', command: '$USER1$/check_http -f follow --sni -I $ARG1$ -H $ARG2$ -s $ARG3$ -u $ARG4$'}
+  - {name: check_disk, command: $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_disk}
+  - {name: check_load, command: $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_load}
+  - {name: check_swap, command: $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_swap}
+  - {name: check_mem, command: $USER1$/check_nrpe -H $HOSTADDRESS$ -c check_mem}
+  - {name: check_https, command: "$USER1$/check_http -f follow -S --verify-host -C 21,14 --continue-after-certificate --sni -I $ARG1$ -H $ARG2$ -s $ARG3$ -u $ARG4$"}
+  - {name: check_https_certonly, command: "$USER1$/check_http -f follow -S --verify-host -C 21,14 --sni -I $ARG1$ -H $ARG2$ -s $ARG3$ -u $ARG4$ -p $ARG5$"}
+  - {name: check_http_full, command: $USER1$/check_http -f follow --sni -I $ARG1$ -H $ARG2$ -s $ARG3$ -u $ARG4$}
 
 nagios_cgi_show_context_help: 1
-nagios_cgi_authorized_for_system_information: '*'
-nagios_cgi_authorized_for_configuration_information: '*'
-nagios_cgi_authorized_for_system_commands: '*'
-nagios_cgi_authorized_for_all_services: '*'
-nagios_cgi_authorized_for_all_hosts: '*'
-nagios_cgi_authorized_for_all_service_commands: '*'
-nagios_cgi_authorized_for_all_host_commands: '*'
+nagios_cgi_authorized_for_system_information: "*"
+nagios_cgi_authorized_for_configuration_information: "*"
+nagios_cgi_authorized_for_system_commands: "*"
+nagios_cgi_authorized_for_all_services: "*"
+nagios_cgi_authorized_for_all_hosts: "*"
+nagios_cgi_authorized_for_all_service_commands: "*"
+nagios_cgi_authorized_for_all_host_commands: "*"
 nagios_cgi_default_statusmap_layout: 5
 nagios_cgi_default_statuswrl_layout: 4
 nagios_cgi_result_limit: 100
 nagios_cgi_escape_html_tags: 0
-nagios_cgi_action_url_target: '_blank'
-nagios_cgi_notes_url_target: '_blank'
+nagios_cgi_action_url_target: _blank
+nagios_cgi_notes_url_target: _blank
 nagios_cgi_lock_author_names: 1
 nagios_server_name: nagios
 nagios_conf_dir: "{{ nagios_base_dir }}/etc"
@@ -132,17 +132,17 @@ nrpe_checks:
     critical_condition: "{{ ansible_processor_vcpus * 2 }},{{ ansible_processor_vcpus * 3 / 2 }},{{ ansible_processor_vcpus }}"
   check_disk:
     command: "{{ nrpe_plugin_dir }}/check_disk"
-    warning_condition: '20%'
-    critical_condition: '10%'
-    parameters: "-A -i '.gvfs' -i /run/user -i /run/lxcfs -i /run/docker -i /var/lib/docker -i /var/lib/kubelet -i '/snap/*' -i /sys/kernel/debug/tracing"
+    warning_condition: 20%
+    critical_condition: 10%
+    parameters: -A -i '.gvfs' -i /run/user -i /run/lxcfs -i /run/docker -i /var/lib/docker -i /var/lib/kubelet -i '/snap/*' -i /sys/kernel/debug/tracing
   check_swap:
     command: "{{ nrpe_plugin_dir }}/check_swap"
-    warning_condition: '30%'
-    critical_condition: '20%'
+    warning_condition: 30%
+    critical_condition: 20%
   check_mem:
     command: "{{ nrpe_plugin_dir }}/check_mem"
-    warning_condition: '70'
-    critical_condition: '80'
+    warning_condition: "70"
+    critical_condition: "80"
 
 nagios_hosts_ignore: ""
 nagios_groups_ignore: ""
@@ -157,7 +157,7 @@ nagios_allowed_hosts:
 nagios_remove_all_group: "no"
 
 # Probably leave this as-is. It should match your top-level ansible playbook, such as "- hosts: monitoring-servers"
-nagios_monitoring_servers_group_name: "monitoring-servers"
+nagios_monitoring_servers_group_name: monitoring-servers
 
 # optionally define more timeperiods.
 nagios_timeperiods: ""
@@ -173,20 +173,20 @@ nagios_timeperiods: ""
 #     saturday: "00:00-06:00,06:15-07:00,07:15-08:00,08:15-24:00"
 #
 
-nsclient_installed_location: 'C:\\Program Files\\NSClient++'
-nsclient_password: 'Pi4j8ZWcUZdecYQu'
+nsclient_installed_location: C:\\Program Files\\NSClient++
+nsclient_password: Pi4j8ZWcUZdecYQu
 # using nagios_allowed_hosts instead of nsclient_allowed_hosts
 # nsclient_allowed_hosts: '127.0.0.1'
-nsclient_ssl_options: 'no-sslv2,no-sslv3'
-nsclient_verify_mode: 'none'
-nsclient_insecure: 'false'
-nsclient_checkexternalscripts: 'enabled'
-nsclient_checkhelpers: 'disabled'
-nsclient_checkeventlog: 'disabled'
-nsclient_checknscp: 'disabled'
-nsclient_checkdisk: 'enabled'
-nsclient_checksystem: 'enabled'
-nsclient_nrpeserver: 'enabled'
+nsclient_ssl_options: no-sslv2,no-sslv3
+nsclient_verify_mode: none
+nsclient_insecure: "false"
+nsclient_checkexternalscripts: enabled
+nsclient_checkhelpers: disabled
+nsclient_checkeventlog: disabled
+nsclient_checknscp: disabled
+nsclient_checkdisk: enabled
+nsclient_checksystem: enabled
+nsclient_nrpeserver: enabled
 # replace this with new output from 'openssl dhparam -C 2048'
 # hopefully the standard installer will include the step soon
 nsclient_nrpe_dh_2048_pem: |

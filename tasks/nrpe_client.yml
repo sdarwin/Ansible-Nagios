@@ -16,7 +16,7 @@
       ansible.builtin.copy:
         src: "{{ nrpe_plugin_dir }}/check_nrpe"
         dest: "{{ nrpe_client_plugins_dir }}/check_nrpe"
-        mode: '0755'
+        mode: "0755"
         owner: "{{ nagios_user }}"
         group: "{{ nagios_group }}"
         remote_src: true
@@ -30,7 +30,7 @@
         path: "{{ nagios_download_dir }}"
         owner: root
         group: root
-        mode: 0755
+        mode: "0755"
         state: directory
 
     - name: Include OS-specific variables.
@@ -49,7 +49,7 @@
         timeout: 30
         url: "{{ nrpe_url }}"
         dest: "{{ nagios_download_dir }}/{{ nrpe_src }}.tar.gz"
-        mode: 0755
+        mode: "0755"
       retries: 3
       delay: 40
       register: result
@@ -73,13 +73,13 @@
         state: directory
         owner: root
         group: root
-        mode: 0755
+        mode: "0755"
 
     - name: Copy check_nrpe
       ansible.builtin.copy:
         src: "{{ nagios_download_dir }}/{{ nrpe_src }}/src/check_nrpe"
         dest: "{{ nrpe_client_plugins_dir }}/check_nrpe"
-        mode: '0755'
+        mode: "0755"
         owner: "{{ nagios_user }}"
         group: "{{ nagios_group }}"
         remote_src: true

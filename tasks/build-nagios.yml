@@ -1,10 +1,9 @@
 ---
-
 - name: GET Nagios
   ansible.builtin.get_url:
     url: "{{ nagios_url }}"
     dest: "{{ nagios_download_dir }}/{{ nagios_src }}.tar.gz"
-    mode: 0755
+    mode: "0755"
 
 - name: Unpack Nagios source files
   ansible.builtin.shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nagios_src }}.tar.gz creates={{ nagios_download_dir }}/{{ nagios_src }}
@@ -54,6 +53,7 @@
 
 - name: Make install-init
   ansible.builtin.shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-init
+  changed_when: true
   when:
     - not init_d_nagios_stat.stat.exists
     - not nagios_service_stat.stat.exists
@@ -70,8 +70,8 @@
     line: "{{ item.line }}"
     insertbefore: "### END INIT INFO"
   with_items:
-    - {regexp: '^# Default-Start:\s*2 3 4 5', line: '# Default-Start:        2 3 4 5'}
-    - {regexp: '^# Default-Stop:\s*0 1 6', line: '# Default-Stop:         0 1 6'}
+    - {regexp: ^# Default-Start:\s*2 3 4 5, line: "# Default-Start:        2 3 4 5"}
+    - {regexp: ^# Default-Stop:\s*0 1 6, line: "# Default-Stop:         0 1 6"}
   when: init_d_nagios_stat_2.stat.exists
 
 - name: Set htpasswd for gui users
@@ -82,7 +82,7 @@
     state: present
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   with_items: "{{ nagios_users | default([]) }}"
   no_log: true
 
@@ -95,7 +95,7 @@
     state: present
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   when: nagios_admins_group in item.groups
   with_items: "{{ users | default([]) }}"
   no_log: true

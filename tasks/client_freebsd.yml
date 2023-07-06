@@ -15,13 +15,13 @@
     dest: /usr/local/etc/nrpe.cfg
     owner: root
     group: wheel
-    mode: 0644
+    mode: "0644"
   notify: Restart nrpe
 
 - name: Enable nrpe3 in /etc/rc.conf
   ansible.builtin.lineinfile:
     path: /etc/rc.conf
-    regexp: '^nrpe3_enable='
+    regexp: ^nrpe3_enable=
     line: nrpe3_enable="YES"
 
 # how to monitor memory on freebsd?
@@ -34,7 +34,7 @@
     state: directory
     owner: root
     group: wheel
-    mode: 0755
+    mode: "0755"
 
 - name: NRPE checks
   ansible.builtin.template:
@@ -42,7 +42,7 @@
     dest: "{{ nrpe_conf_dir }}/nrpe.d/{{ item.key }}.cfg"
     owner: root
     group: wheel
-    mode: 0644
+    mode: "0644"
   with_dict: "{{ nrpe_checks }}"
   notify: Restart nrpe
 

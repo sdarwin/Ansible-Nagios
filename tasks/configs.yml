@@ -7,7 +7,7 @@
     dest: "{{ nagios_object_dir }}/{{ item.dest }}"
     owner: "{{ nagios_user }}"
     group: "{{ nagios_group }}"
-    mode: '0640'
+    mode: "0640"
   with_items:
     - {src: hosts.cfg, dest: hosts.cfg}
     - {src: hostgroups.cfg, dest: hostgroups.cfg}
@@ -23,7 +23,7 @@
     dest: "{{ nagios_object_dir }}/{{ item.dest }}"
     owner: "{{ nagios_user }}"
     group: "{{ nagios_group }}"
-    mode: '0640'
+    mode: "0640"
   with_items:
     - {src: contacts.cfg, dest: contacts.cfg}
   when: users is defined
@@ -36,7 +36,7 @@
     dest: "{{ nagios_base_dir }}/etc/{{ item.dest }}"
     owner: "{{ nagios_user }}"
     group: "{{ nagios_group }}"
-    mode: '0775'
+    mode: "0775"
   with_items:
     - {src: cgi.cfg, dest: cgi.cfg}
 
@@ -47,8 +47,8 @@
   notify: Restart nagios
   ansible.builtin.lineinfile:
     dest: "{{ nagios_base_dir }}/etc/nagios.cfg"
-    line: "cfg_file={{ nagios_object_dir }}/{{ item }}.cfg"
-    regexp: "^cfg_file={{ nagios_object_dir }}/{{ item }}.cfg"
+    line: cfg_file={{ nagios_object_dir }}/{{ item }}.cfg
+    regexp: ^cfg_file={{ nagios_object_dir }}/{{ item }}.cfg
   with_items:
     - hosts
     - hostgroups
@@ -62,8 +62,8 @@
   notify: Restart nagios
   ansible.builtin.lineinfile:
     dest: "{{ nagios_base_dir }}/etc/nagios.cfg"
-    line: "cfg_dir={{ nagios_object_dir }}"
-    regexp: "^cfg_dir={{ nagios_object_dir }}"
+    line: cfg_dir={{ nagios_object_dir }}
+    regexp: ^cfg_dir={{ nagios_object_dir }}
   when: nagios_cfg_dir_enabled
 
 # if there is a conflict: two localhost definitions
@@ -74,7 +74,7 @@
     path: "{{ nagios_base_dir }}/etc/nagios.cfg"
     line: "#cfg_file={{ nagios_object_dir }}/{{ item }}.cfg"
     # regexp: "^cfg_file\={{ nagios_object_dir }}/{{item}}\.cfg"
-    regexp: "^cfg_file={{ nagios_object_dir }}/{{ item }}.cfg"
+    regexp: ^cfg_file={{ nagios_object_dir }}/{{ item }}.cfg
     backrefs: true
   with_items:
     - localhost

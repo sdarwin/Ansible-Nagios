@@ -21,6 +21,7 @@
     state: restarted
 
 - name: Restart nrpe osx
+  changed_when: false
   ansible.builtin.shell: |
     /bin/launchctl unload /Library/LaunchDaemons/homebrew.mxcl.nrpe.plist
     /usr/bin/pkill -f /usr/local/opt/nrpe/bin/nrpe

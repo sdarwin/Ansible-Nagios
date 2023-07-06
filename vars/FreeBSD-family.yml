@@ -17,13 +17,13 @@ nrpe_checks:
     critical_condition: "{{ ansible_processor_count | int * 2 }},{{ ansible_processor_count | int * 3 / 2 }},{{ ansible_processor_count | int }}"
   check_disk:
     command: "{{ nrpe_plugin_dir }}/check_disk"
-    warning_condition: '20%'
-    critical_condition: '10%'
-    parameters: "-p /"
+    warning_condition: 20%
+    critical_condition: 10%
+    parameters: -p /
   check_swap:
     command: "{{ nrpe_plugin_dir }}/check_swap"
-    warning_condition: '30%'
-    critical_condition: '20%'
+    warning_condition: 30%
+    critical_condition: 20%
     # check_mem:
     #   command: "{{ nrpe_plugin_dir }}/check_mem"
     #   warning_condition: '70'

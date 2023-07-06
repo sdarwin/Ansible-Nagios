@@ -1,11 +1,11 @@
 ---
 - name: Set fact nagios_mac_install_base
   ansible.builtin.set_fact:
-    nagios_mac_install_base: "/usr/local"
+    nagios_mac_install_base: /usr/local
 
 - name: Set fact nagios_mac_install_base arm64
   ansible.builtin.set_fact:
-    nagios_mac_install_base: "/opt/homebrew"
+    nagios_mac_install_base: /opt/homebrew
   when: ansible_architecture == "arm64"
 
 - name: Ensure nrpe_group exists
@@ -16,7 +16,7 @@
 - name: Ensure nrpe_user exists
   ansible.builtin.user:
     name: "{{ nrpe_user }}"
-    shell: "/bin/false"
+    shell: /bin/false
     groups: "{{ nrpe_group }}"
     append: true
 
@@ -34,6 +34,7 @@
 - name: Install brew
   ansible.builtin.command: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
   when: does_brew_exist.rc
+  changed_when: true
 
 - name: Set fact nrpe_plugin_dir_default
   ansible.builtin.set_fact:
@@ -41,7 +42,7 @@
 
 # Just ran into this problem. A conflict with prometheus.
 # Might solve it another way in the future.
-- name: Fix dir permissions  # noqa deprecated-command-syntax
+- name: Fix dir permissions  # noqa no-free-form
   ansible.builtin.shell: |
     chmod g+w {{ nagios_mac_install_base }}/var/log
   args:
@@ -67,7 +68,7 @@
     dest: /Library/LaunchDaemons/homebrew.mxcl.nrpe.plist
     owner: root
     group: wheel
-    mode: 0755
+    mode: "0755"
   notify: Restart nrpe osx
 
 - name: Remove default LaunchDaemon config
@@ -85,7 +86,7 @@
     dest: "{{ nagios_mac_install_base }}/etc/nrpe.cfg"
     owner: administrator
     group: admin
-    mode: 0644
+    mode: "0644"
   notify: Restart nrpe osx
 
 - name: Create nrpe.d dir
@@ -94,7 +95,7 @@
     state: directory
     owner: administrator
     group: admin
-    mode: 0755
+    mode: "0755"
 
 - name: NRPE checks
   ansible.builtin.template:
@@ -102,7 +103,7 @@
     dest: "{{ nrpe_conf_dir }}/nrpe.d/{{ item.key }}.cfg"
     owner: administrator
     group: admin
-    mode: 0644
+    mode: "0644"
   with_dict: "{{ nrpe_checks }}"
   notify: Restart nrpe osx
 
