@@ -8,8 +8,8 @@ nagios_download_dir: "{{ ansible_env.HOME }}/nagios"
 nagios_admins_group: 'sysadmin'
 # nagios_users_group: 'users'
 
-nagios_version: 4.4.6
-nagios_plugins_version: 2.3.3
+nagios_version: 4.4.9
+nagios_plugins_version: 2.4.4
 nrpe_version: 4.0.3
 
 # Define the download url for the Nagios Core source files and the version you want to use.
