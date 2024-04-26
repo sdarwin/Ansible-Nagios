@@ -58,7 +58,6 @@
     state: present
 
 - name: Install passlib
-  ansible.builtin.pip:
-    name:
-      - passlib
-  changed_when: false
+  ansible.builtin.yum:
+    name: python3-passlib
+    state: present

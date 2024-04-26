@@ -45,21 +45,23 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - distro: centos7
-            playbook: converge.yml
+          # - distro: centos7
+          #   playbook: converge.yml
           - distro: centos8
             playbook: converge.yml
-          - distro: debian9
-            playbook: converge.yml
+          # - distro: debian9
+          #   playbook: converge.yml
           - distro: debian10
             playbook: converge.yml
-          - distro: ubuntu1604
-            playbook: converge.yml
+          # - distro: ubuntu1604
+          #   playbook: converge.yml
           - distro: ubuntu1804
             playbook: converge.yml
           - distro: ubuntu2004
             playbook: converge.yml
           - distro: ubuntu2204
+            playbook: converge.yml
+          - distro: ubuntu2404
             playbook: converge.yml
 
     steps:
@@ -74,7 +76,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install test dependencies.
-        run: pip3 install ansible molecule[docker] docker
+        run: pip3 install ansible molecule-plugins[docker] docker
         # run: |
         #   pip3 install ansible==6.4.0
         #   pip3 install molecule[docker]==4.0.1
