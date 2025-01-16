@@ -1,0 +1,28 @@
+---
+- hosts: all:!windows:!blackbox
+  remote_user: ubuntu
+  become: true
+  tasks:
+    - name: collect facts
+      setup:
+
+- hosts: windows
+  tasks:
+    - name: collect facts
+      setup:
+
+- hosts: newservers:!windows
+  become: true
+  roles:
+    - {role: 'sdarwin.nagios', run_nagios_client: true}
+
+- hosts: newservers:&windows
+  roles:
+    - {role: 'sdarwin.nagios', run_nagios_client: true}
+
+- hosts: monitoring-servers
+  remote_user: ubuntu
+  become: true
+  roles:
+    # this is the Ansible Galaxy name, you could change it to Ansible-Nagios if directly downloading from github
+    - {role: 'sdarwin.nagios', run_nagios_server: true}
