@@ -1,26 +1,31 @@
 ---
-- hosts: all:!windows:!blackbox
+- name: Collect Facts
+  hosts: all:!windows:!blackbox
   remote_user: ubuntu
   become: true
   tasks:
-    - name: collect facts
-      setup:
+    - name: Collect facts
+      ansible.builtin.setup:
 
-- hosts: windows
+- name: Collect Facts (on Windows)
+  hosts: windows
   tasks:
-    - name: collect facts
-      setup:
+    - name: Collect facts
+      ansible.builtin.setup:
 
-- hosts: newservers:!windows
+- name: Install Nagios Client (on new server)
+  hosts: newservers:!windows
   become: true
   roles:
     - {role: 'sdarwin.nagios', run_nagios_client: true}
 
-- hosts: newservers:&windows
+- name: Install Nagios Client (on new windows server)
+  hosts: newservers:&windows
   roles:
     - {role: 'sdarwin.nagios', run_nagios_client: true}
 
-- hosts: monitoring-servers
+- name: Monitoring Servers
+  hosts: monitoring-servers
   remote_user: ubuntu
   become: true
   roles:

@@ -6,16 +6,23 @@
     mode: "0755"
 
 - name: Unpack Plugin source files
-  ansible.builtin.shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nagios_pluginssrc }}.tar.gz creates={{ nagios_download_dir }}/{{ nagios_pluginssrc }}
+  ansible.builtin.shell:
+    cmd: cd {{ nagios_download_dir }} && tar -xzvf {{ nagios_pluginssrc }}.tar.gz
+    creates: "{{ nagios_download_dir }}/{{ nagios_pluginssrc }}"
 
-- name: Configure Plugins
-  ansible.builtin.shell: ./configure --with-nagios-user={{ nagios_monitoring_user }} --with-nagios-group=nagios --with-openssl=/usr/bin/openssl  # noqa command-instead-of-shell
+- name: Configure Plugins  # noqa command-instead-of-shell
+  ansible.builtin.shell:
+    cmd: ./configure --with-nagios-user={{ nagios_monitoring_user }} --with-nagios-group=nagios --with-openssl=/usr/bin/openssl
   args:
     chdir: "{{ nagios_download_dir }}/{{ nagios_pluginssrc }}"
     creates: "{{ nagios_download_dir }}/{{ nagios_pluginssrc }}/Makefile"
 
 - name: Make Plugins
-  ansible.builtin.shell: cd {{ nagios_download_dir }}/{{ nagios_pluginssrc }} && make creates={{ nagios_download_dir }}/{{ nagios_pluginssrc }}/plugins/check_ping
+  ansible.builtin.shell:
+    cmd: cd {{ nagios_download_dir }}/{{ nagios_pluginssrc }} && make
+    creates: "{{ nagios_download_dir }}/{{ nagios_pluginssrc }}/plugins/check_ping"
 
 - name: Make Install Plugins
-  ansible.builtin.shell: cd {{ nagios_download_dir }}/{{ nagios_pluginssrc }} && make install creates=/usr/local/nagios/libexec/check_ping
+  ansible.builtin.shell:
+    cmd: cd {{ nagios_download_dir }}/{{ nagios_pluginssrc }} && make install
+    creates: /usr/local/nagios/libexec/check_ping

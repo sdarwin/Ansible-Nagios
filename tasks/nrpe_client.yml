@@ -56,16 +56,21 @@
       until: result is not failed
 
     - name: Unpack NRPE source files
-      ansible.builtin.shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nrpe_src }}.tar.gz creates={{ nagios_download_dir }}/{{ nrpe_src }}
+      ansible.builtin.shell:
+        cmd: cd {{ nagios_download_dir }} && tar -xzvf {{ nrpe_src }}.tar.gz
+        creates: "{{ nagios_download_dir }}/{{ nrpe_src }}"
 
     - name: Configure NRPE
-      ansible.builtin.shell: ./configure --with-ssl=/usr/bin/openssl --with-ssl-lib=/usr/lib/x86_64-linux-gnu  # noqa command-instead-of-shell
+      ansible.builtin.shell: # noqa command-instead-of-shell
+        cmd: ./configure --with-ssl=/usr/bin/openssl --with-ssl-lib=/usr/lib/x86_64-linux-gnu
       args:
         chdir: "{{ nagios_download_dir }}/{{ nrpe_src }}"
         creates: "{{ nagios_download_dir }}/{{ nrpe_src }}/Makefile"
 
     - name: Make NRPE
-      ansible.builtin.shell: cd {{ nagios_download_dir }}/{{ nrpe_src }} && make all creates={{ nagios_download_dir }}/{{ nrpe_src }}/src/check_nrpe
+      ansible.builtin.shell:
+        cmd: cd {{ nagios_download_dir }}/{{ nrpe_src }} && make all
+        creates: "{{ nagios_download_dir }}/{{ nrpe_src }}/src/check_nrpe"
 
     - name: Ensure plugins directory is present
       ansible.builtin.file:

@@ -8,7 +8,7 @@
   when: ansible_os_family == 'RedHat'
 
 - name: Install epel repo
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: "{{ epel_repo_url }}"
     state: present
   tags:
@@ -17,7 +17,7 @@
 
 # To enable powertools, see next step
 - name: Install dnf-plugins-core
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: dnf-plugins-core
     state: present
   when:
@@ -33,31 +33,31 @@
   changed_when: false
 
 - name: Install apache
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: "{{ nagios_apache_packages }}"
     state: present
 
 - name: Install Nagios prerequisites for CentOS
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: "{{ nagios_prerequisite_packages }}"
     state: present
 
 - name: Install plugin prerequisites for CentOS
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: "{{ nagios_plugin_packages }}"
     state: present
 
 - name: Install NRPE prerequisites
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: "{{ nagios_nrpe_prerequisite_packages }}"
     state: present
 
 - name: Install nagios python packages
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: "{{ nagios_python_packages }}"
     state: present
 
 - name: Install passlib
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: python3-passlib
     state: present

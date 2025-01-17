@@ -6,31 +6,46 @@
     mode: "0755"
 
 - name: Unpack Nagios source files
-  ansible.builtin.shell: cd {{ nagios_download_dir }} && tar -xzvf {{ nagios_src }}.tar.gz creates={{ nagios_download_dir }}/{{ nagios_src }}
+  ansible.builtin.shell:
+    cmd: cd {{ nagios_download_dir }} && tar -xzvf {{ nagios_src }}.tar.gz
+    creates: "{{ nagios_download_dir }}/{{ nagios_src }}"
 
-- name: ./configure
-  ansible.builtin.shell: ./configure --with-command-group={{ nagios_monitoring_command_group }} -with-httpd_conf={{ nagios_with_httpd_conf }} --with-nagios-user={{ nagios_monitoring_user }}  # noqa 204 command-instead-of-shell
+- name: ./configure # noqa 204 command-instead-of-shell
+  ansible.builtin.shell:
+    cmd: ./configure --with-command-group={{ nagios_monitoring_command_group }} -with-httpd_conf={{ nagios_with_httpd_conf }} --with-nagios-user={{ nagios_monitoring_user }}
   args:
     chdir: "{{ nagios_download_dir }}/{{ nagios_src }}"
     creates: "{{ nagios_download_dir }}/{{ nagios_src }}/Makefile"
 
 - name: Make all
-  ansible.builtin.shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make all creates={{ nagios_download_dir }}/{{ nagios_src }}/base/nagios
+  ansible.builtin.shell:
+    cmd: cd {{ nagios_download_dir }}/{{ nagios_src }} && make all
+    creates: "{{ nagios_download_dir }}/{{ nagios_src }}/base/nagios"
 
 - name: Make install
-  ansible.builtin.shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install creates=/usr/local/nagios/bin/nagios
+  ansible.builtin.shell:
+    cmd: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install
+    creates: /usr/local/nagios/bin/nagios
 
 - name: Make install-config
-  ansible.builtin.shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-config creates=/usr/local/nagios/etc/nagios.cfg
+  ansible.builtin.shell:
+    cmd: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-config
+    creates: /usr/local/nagios/etc/nagios.cfg
 
 - name: Make install-commandmode
-  ansible.builtin.shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-commandmode creates=/usr/local/nagios/var/rw
+  ansible.builtin.shell:
+    cmd: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-commandmode
+    creates: /usr/local/nagios/var/rw
 
 - name: Make install-devel
-  ansible.builtin.shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-devel creates=/usr/local/nagios/include/nagios/nagios.h
+  ansible.builtin.shell:
+    cmd: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-devel
+    creates: /usr/local/nagios/include/nagios/nagios.h
 
 - name: Make install-webconf
-  ansible.builtin.shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-webconf creates={{ nagios_with_httpd_conf }}/nagios.conf
+  ansible.builtin.shell:
+    cmd: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-webconf
+    creates: "{{ nagios_with_httpd_conf }}/nagios.conf"
   notify: Restart apache
   when: not ( ansible_distribution == "Debian" and ansible_distribution_major_version == "7" )
 

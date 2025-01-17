@@ -33,9 +33,11 @@ jobs:
 
       - name: Lint code.
         run: |
-          set -e
+          set -ex
+          yamllint --version
           yamllint .
-          ansible-lint .
+          ansible-lint --version
+          ansible-lint
 
   molecule:
     name: Molecule

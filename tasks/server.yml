@@ -84,7 +84,9 @@
   when: ansible_distribution == 'Debian'
 
 - name: Fix Nagios startup on Debian
-  ansible.builtin.shell: cd /etc/rc2.d && ln -s ../init.d/nagios S18nagios creates=/etc/rc2.d/S18nagios
+  ansible.builtin.shell:
+    cmd: cd /etc/rc2.d && ln -s ../init.d/nagios S18nagios
+    creates: /etc/rc2.d/S18nagios
   when: ansible_distribution == 'Debian'
 
 - name: Default facts for selinux
