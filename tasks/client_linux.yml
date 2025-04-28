@@ -110,3 +110,11 @@
     mode: "0644"
   with_dict: "{{ nrpe_checks }}"
   notify: Restart nrpe
+
+# Customization. You may skip.
+- name: Install drone plugin
+  ansible.builtin.copy:
+    src: files/check_drone_autoscaler_queues
+    dest: "{{ nrpe_plugin_dir }}/check_drone_autoscaler_queues"
+    mode: "0755"
+  when: nagios_install_drone_plugin

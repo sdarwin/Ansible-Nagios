@@ -198,3 +198,6 @@ nsclient_nrpe_dh_2048_pem: |
   frp7q4kNwrgYimvXKGO9kRCtbrG9XR0yHqirN/tknNFtHdGfZMQQ5PDoRGevinYm
   pzX4yHHv5xQ9VqsiTHNvh6oRG/ra2xDeawIBAg==
   -----END DH PARAMETERS-----
+
+# Customized plugin. You may ignore.
+nagios_install_drone_plugin: false

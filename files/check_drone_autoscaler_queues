@@ -1,0 +1,46 @@
+#!/bin/bash
+
+set -e
+the_date=$(date "+%Y-%m-%d-%H-%M-%S")
+
+if [ "$1" = "-w" ] && [ "$2" -gt "0" ] && [ "$3" = "-c" ] && [ "$4" -gt "0" ]; then
+    export warning_level=$2
+    export critical_level=$4
+    cd /opt/munin
+    files=$(ls -1)
+    for file in $files; do
+        queuelength=$(cat $file)
+	# echo "file is $file. queuelength is $queuelength"
+        if [ "$queuelength" -ge "$critical_level" ]; then
+            echo "CRITICAL - queue length ${queuelength}."
+            echo ${the_date} > /tmp/queuecheck.log
+            echo ${queuelength} >> /tmp/queuecheck.log
+            exit 2
+        fi
+    done
+
+    for file in $files; do
+        queuelength=$(cat $file)
+	# echo "warnings. file is $file. queuelength is $queuelength"
+        if [ "$queuelength" -ge "$warning_level" ]; then
+            echo "WARNING - queue length ${queuelength}."
+            echo ${the_date} > /tmp/queuecheck.log
+            echo ${queuelength} >> /tmp/queuecheck.log
+            exit 1
+        fi
+    done
+
+    echo "OK"
+    exit 0
+
+else
+    echo "check_drone_autoscaler_queues"
+    echo ""
+    echo "Usage:"
+    echo "check_drone_autoscaler_queues -w <warnlevel> -c <critlevel>"
+    echo ""
+    echo "warnlevel and critlevel is number of instances."
+    echo ""
+    echo "Copyright (C) 2025 Sam Darwin"
+    exit
+fi
