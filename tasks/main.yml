@@ -19,8 +19,12 @@
 
 - name: Include client
   ansible.builtin.import_tasks: client.yml
-  when: nagios_client_enabled | default(run_nagios_client) | default(false) | bool
+  when: >
+    (nagios_client_enabled is defined and nagios_client_enabled | bool) or
+    (nagios_client_enabled is not defined and run_nagios_client is defined)
 
 - name: Include server
   ansible.builtin.import_tasks: server.yml
-  when: nagios_server_enabled | default(run_nagios_server) | default(false) | bool
+  when: >
+    (nagios_server_enabled is defined and nagios_server_enabled | bool) or
+    (nagios_server_enabled is not defined and run_nagios_server is defined)
