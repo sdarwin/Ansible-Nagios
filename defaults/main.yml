@@ -1,7 +1,7 @@
 ---
 # defaults file for nagios
-nagios_client_enabled: false
-nagios_server_enabled: false
+run_nagios_client: false
+run_nagios_server: false
 
 nrpe_plugin_dir: /usr/lib/nagios/plugins
 
