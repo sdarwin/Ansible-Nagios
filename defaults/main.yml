@@ -1,5 +1,8 @@
 ---
 # defaults file for nagios
+run_nagios_client: false
+run_nagios_server: false
+
 nrpe_plugin_dir: /usr/lib/nagios/plugins
 
 # Directory that will be used as the location for the downloads§

@@ -19,8 +19,12 @@
 
 - name: Include client
   ansible.builtin.import_tasks: client.yml
-  when: run_nagios_client is defined
+  when:
+    - run_nagios_client is defined
+    - run_nagios_client | bool
 
 - name: Include server
   ansible.builtin.import_tasks: server.yml
-  when: run_nagios_server is defined
+  when:
+    - run_nagios_server is defined
+    - run_nagios_server | bool
