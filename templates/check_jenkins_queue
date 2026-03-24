@@ -1,0 +1,29 @@
+#!/bin/bash
+set -e
+the_date=$(date "+%Y-%m-%d-%H-%M-%S")
+export username={{check_jenkins_queue_username}}
+export password={{check_jenkins_queue_password}}
+export jenkins_url={{check_jenkins_queue_url}}
+export warning_level=1
+export critical_level=5
+# Earlier queuelength:
+# queuelength=$(curl -u $username:$password -d "script=println Jenkins.instance.queue.items.length" $jenkins_url/scriptText)
+# 2025-02 new computation. 
+queuelength=$(curl -u $username:$password -d "script=println Jenkins.instance.queue.items" $jenkins_url/scriptText | grep -o 'Buildable' | wc -l )
+queue_items=$(curl -u $username:$password -d "script=println Jenkins.instance.queue.items" $jenkins_url/scriptText)
+queuelength="${queuelength%\\n}"
+if [ "$queuelength" -ge "$critical_level" ]; then
+    echo "CRITICAL - queue length ${queuelength}."
+    echo ${the_date} >> /tmp/jenkins_queue.log
+    echo ${queue_items} >> /tmp/jenkins_queue.log
+    exit 2
+elif [ "$queuelength" -ge "$warning_level" ]; then
+    echo "WARNING - queue length ${queuelength}."
+    echo ${the_date} >> /tmp/jenkins_queue.log
+    echo ${queue_items} >> /tmp/jenkins_queue.log
+    exit 1
+else
+    echo "OK - queue length ${queuelength}."
+    exit 0
+fi
+

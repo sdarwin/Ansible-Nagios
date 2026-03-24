@@ -111,10 +111,22 @@
   with_dict: "{{ nrpe_checks }}"
   notify: Restart nrpe
 
-# Customization. You may skip.
+################################################################
+#
+# Customizations. You may skip.
+#
+################################################################
+
 - name: Install drone plugin
   ansible.builtin.copy:
     src: files/check_drone_autoscaler_queues
     dest: "{{ nrpe_plugin_dir }}/check_drone_autoscaler_queues"
     mode: "0755"
   when: nagios_install_drone_plugin
+
+- name: Install check_jenkins_queue plugin
+  ansible.builtin.template:
+    src: check_jenkins_queue
+    dest: "{{ nrpe_plugin_dir }}/check_jenkins_queue"
+    mode: "0755"
+  when: check_jenkins_queue_url is defined and check_jenkins_queue_url | length > 0
