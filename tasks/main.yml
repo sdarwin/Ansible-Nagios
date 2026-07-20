@@ -7,13 +7,15 @@
 - name: Include Distribution version specific variables
   ansible.builtin.include_vars: "{{ ansible_facts['distribution'] }}-{{ ansible_facts['distribution_major_version'] }}.yml"
 
+# For every `default_<name>` variable, define `<name>` from it, but only when
+# `<name>` has not already been set elsewhere (inventory, group/host vars, extra
+# vars, etc.). This makes the role's per-OS `vars/*.yml` values behave like
+# overridable defaults instead of high-precedence role vars.
 - name: Set facts based on defaults  # noqa var-naming
   ansible.builtin.set_fact:
     "{{ item[8:] }}": "{{ lookup('vars', item) }}"
-  when:
-    - item is match("^default_")
-    - vars[item[8:]] is not defined
-  with_items: "{{ vars | list }}"
+  when: item[8:] not in query('varnames', '.*')
+  loop: "{{ query('varnames', '^default_') }}"
 
 ##########
 
