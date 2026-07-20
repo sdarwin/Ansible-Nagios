@@ -6,7 +6,7 @@ run_nagios_server: false
 nrpe_plugin_dir: /usr/lib/nagios/plugins
 
 # Directory that will be used as the location for the downloads§
-nagios_download_dir: "{{ ansible_env.HOME }}/nagios"
+nagios_download_dir: "{{ ansible_facts['env'].HOME }}/nagios"
 
 nagios_admins_group: sysadmin
 # nagios_users_group: 'users'
@@ -42,7 +42,7 @@ nagios_users:
 
 # Directory that will be used as the location for the download
 # actually, already defined above.
-# download_dir: "{{ ansible_env.HOME }}/nrpe"
+# download_dir: "{{ ansible_facts['env'].HOME }}/nrpe"
 
 # This NRPE package is only used for the plugin, as the nrpe plugin on some distributions
 # require the distributions Nagios package to be installed.
@@ -131,8 +131,8 @@ nagios_service_name: nagios
 nrpe_checks:
   check_load:
     command: "{{ nrpe_plugin_dir }}/check_load"
-    warning_condition: "{{ ansible_processor_vcpus }},{{ ansible_processor_vcpus * 3 / 4 }},{{ ansible_processor_vcpus / 2 }}"
-    critical_condition: "{{ ansible_processor_vcpus * 2 }},{{ ansible_processor_vcpus * 3 / 2 }},{{ ansible_processor_vcpus }}"
+    warning_condition: "{{ ansible_facts['processor_vcpus'] }},{{ ansible_facts['processor_vcpus'] * 3 / 4 }},{{ ansible_facts['processor_vcpus'] / 2 }}"
+    critical_condition: "{{ ansible_facts['processor_vcpus'] * 2 }},{{ ansible_facts['processor_vcpus'] * 3 / 2 }},{{ ansible_facts['processor_vcpus'] }}"
   check_disk:
     command: "{{ nrpe_plugin_dir }}/check_disk"
     warning_condition: 20%

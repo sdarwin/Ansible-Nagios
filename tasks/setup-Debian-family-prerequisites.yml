@@ -18,7 +18,7 @@
 - name: Install Plugin prerequisites for Ubuntu
   ansible.builtin.apt:
     name: [libradiusclient-ng-dev]
-  when: ansible_distribution == 'Ubuntu' and ( ansible_distribution_version == '12.04' or ansible_distribution_version == '14.04' )
+  when: ansible_facts['distribution'] == 'Ubuntu' and ( ansible_facts['distribution_version'] == '12.04' or ansible_facts['distribution_version'] == '14.04' )
 
 - name: Install NRPE prerequisites
   ansible.builtin.apt:

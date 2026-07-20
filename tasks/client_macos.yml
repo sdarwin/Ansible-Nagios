@@ -6,7 +6,7 @@
 - name: Set fact nagios_mac_install_base arm64
   ansible.builtin.set_fact:
     nagios_mac_install_base: /opt/homebrew
-  when: ansible_architecture == "arm64"
+  when: ansible_facts['architecture'] == "arm64"
 
 - name: Ensure nrpe_group exists
   ansible.builtin.group:

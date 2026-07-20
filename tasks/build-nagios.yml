@@ -47,14 +47,14 @@
     cmd: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-webconf
     creates: "{{ nagios_with_httpd_conf }}/nagios.conf"
   notify: Restart apache
-  when: not ( ansible_distribution == "Debian" and ansible_distribution_major_version == "7" )
+  when: not ( ansible_facts['distribution'] == "Debian" and ansible_facts['distribution_major_version'] == "7" )
 
 - name: Make install-webconf-Debian
   ansible.builtin.shell: cd {{ nagios_download_dir }}/{{ nagios_src }} && make install-webconf HTTPD_CONF={{ nagios_with_httpd_conf }}
   args:
     creates: "{{ nagios_with_httpd_conf }}/nagios.conf"
   notify: Restart apache
-  when: ansible_distribution == "Debian" and ansible_distribution_major_version == "7"
+  when: ansible_facts['distribution'] == "Debian" and ansible_facts['distribution_major_version'] == "7"
 
 - name: Check if /etc/init.d/nagios exists
   ansible.builtin.stat:

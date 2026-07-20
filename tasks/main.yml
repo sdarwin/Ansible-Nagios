@@ -2,10 +2,10 @@
 # Variables ##########
 
 - name: Include OS-specific variables.
-  ansible.builtin.include_vars: "{{ ansible_os_family }}-family.yml"
+  ansible.builtin.include_vars: "{{ ansible_facts['os_family'] }}-family.yml"
 
 - name: Include Distribution version specific variables
-  ansible.builtin.include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+  ansible.builtin.include_vars: "{{ ansible_facts['distribution'] }}-{{ ansible_facts['distribution_major_version'] }}.yml"
 
 - name: Set facts based on defaults  # noqa var-naming
   ansible.builtin.set_fact:

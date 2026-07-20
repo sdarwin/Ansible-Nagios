@@ -5,7 +5,7 @@
     state: present
   tags:
     - epel
-  when: ansible_os_family == 'RedHat'
+  when: ansible_facts['os_family'] == 'RedHat'
 
 - name: Install epel repo
   ansible.builtin.dnf:
@@ -13,7 +13,7 @@
     state: present
   tags:
     - epel
-  when: ansible_os_family == 'RedHat'
+  when: ansible_facts['os_family'] == 'RedHat'
 
 # To enable powertools, see next step
 - name: Install dnf-plugins-core
@@ -21,15 +21,15 @@
     name: dnf-plugins-core
     state: present
   when:
-    - ansible_os_family == 'RedHat'
-    - ansible_distribution_major_version|int > 7
+    - ansible_facts['os_family'] == 'RedHat'
+    - ansible_facts['distribution_major_version']|int > 7
 
 # For certain Perl modules to be available
 - name: Install powertools
   ansible.builtin.command: dnf config-manager --set-enabled powertools
   when:
-    - ansible_os_family == 'RedHat'
-    - ansible_distribution_major_version|int > 7
+    - ansible_facts['os_family'] == 'RedHat'
+    - ansible_facts['distribution_major_version']|int > 7
   changed_when: false
 
 - name: Install apache

@@ -13,8 +13,8 @@ nrpe_command_timeout: 60
 nrpe_checks:
   check_load:
     command: "{{ nrpe_plugin_dir }}/check_load"
-    warning_condition: "{{ ansible_processor_count | int }},{{ ansible_processor_count | int * 3 / 4 }},{{ ansible_processor_count | int / 2 }}"
-    critical_condition: "{{ ansible_processor_count | int * 2 }},{{ ansible_processor_count | int * 3 / 2 }},{{ ansible_processor_count | int }}"
+    warning_condition: "{{ ansible_facts['processor_count'] | int }},{{ ansible_facts['processor_count'] | int * 3 / 4 }},{{ ansible_facts['processor_count'] | int / 2 }}"
+    critical_condition: "{{ ansible_facts['processor_count'] | int * 2 }},{{ ansible_facts['processor_count'] | int * 3 / 2 }},{{ ansible_facts['processor_count'] | int }}"
   check_disk:
     command: "{{ nrpe_plugin_dir }}/check_disk"
     warning_condition: 20%
