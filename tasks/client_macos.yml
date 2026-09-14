@@ -31,8 +31,16 @@
   ignore_errors: true
   changed_when: false
 
+# install.sh calls check_run_command_as_root and aborts with "Don't run this as
+# root!", so this cannot inherit the play's become: true. It installs under
+# "administrator", who needs passwordless sudo: with NONINTERACTIVE set the
+# installer uses "sudo -n" and will not prompt.
 - name: Install brew
   ansible.builtin.command: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  environment:
+    NONINTERACTIVE: "1"
+  become: true
+  become_user: administrator
   when: does_brew_exist.rc != 0
   changed_when: true
 
