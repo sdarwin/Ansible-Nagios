@@ -50,17 +50,31 @@
   failed_when: false
   changed_when: false
 
+# brew refuses to run as root, and it is installed under "administrator", so
+# these two run as that user rather than as whoever we connected as. This needs
+# the connecting user's sudoers entry to permit running as any user, not only
+# as root.
+#
+# Connection user and become_user are both unprivileged here, so Ansible has to
+# hand the module file from one to the other. On macOS it does that with an ACL
+# ("chmod +a", used since Ansible 2.11) and usually succeeds. If it instead
+# reports "Failed to set permissions on the temporary files Ansible needs to
+# create when becoming an unprivileged user", turn on pipelining, which skips
+# the temporary file altogether: ANSIBLE_PIPELINING=true, or pipelining = True
+# under [connection] in ansible.cfg.
 - name: Install nagios-plugins
   community.general.homebrew:
     name: nagios-plugins
     state: present
-  become: false
+  become: true
+  become_user: administrator
 
 - name: Install nrpe
   community.general.homebrew:
     name: nrpe
     state: present
-  become: false
+  become: true
+  become_user: administrator
 
 - name: LaunchDaemon config
   ansible.builtin.template:
