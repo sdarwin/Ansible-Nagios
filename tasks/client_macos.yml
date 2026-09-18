@@ -8,6 +8,30 @@
     nagios_mac_install_base: /opt/homebrew
   when: ansible_facts['architecture'] == "arm64"
 
+# Catalina's brew is pinned, by scripts/bootstrap_mac_earlier_than_14.sh in the
+# dronerunner repo: 6.0.22, whose own floor is still 10.15, with homebrew-core
+# checked out at a 2022 commit for the sake of the catalina bottles. Brew needs
+# telling that, and these are the same variables that script exports.
+#
+# NO_INSTALL_FROM_API is the one that surfaces as an error: brew otherwise reads
+# formulae from formulae.brew.sh, whose per-OS index for an unsupported release
+# does not exist, so every command dies on "packages.catalina.jws.json ... HTTP
+# status: 404" before doing any work. NO_AUTO_UPDATE stops brew upgrading itself
+# to 7.x on the first install, which would leave the host with a brew that
+# refuses to start. NO_ASK is for brew 6's habit of prompting to confirm a plan
+# that pulls in dependencies.
+#
+# Empty on every other host. Disabling the API elsewhere would send a current
+# brew looking for a homebrew-core clone it has no reason to have.
+- name: Set the homebrew environment
+  ansible.builtin.set_fact:
+    nagios_brew_env: "{{ nagios_brew_env_catalina if ansible_facts['distribution_version'].startswith('10.15') else {} }}"
+  vars:
+    nagios_brew_env_catalina:
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+      HOMEBREW_NO_INSTALL_FROM_API: "1"
+      HOMEBREW_NO_ASK: "1"
+
 - name: Ensure nrpe_group exists
   ansible.builtin.group:
     name: "{{ nrpe_group }}"
@@ -76,6 +100,7 @@
     state: present
   become: true
   become_user: administrator
+  environment: "{{ nagios_brew_env }}"
 
 - name: Install nrpe
   community.general.homebrew:
@@ -83,6 +108,7 @@
     state: present
   become: true
   become_user: administrator
+  environment: "{{ nagios_brew_env }}"
 
 - name: LaunchDaemon config
   ansible.builtin.template:
